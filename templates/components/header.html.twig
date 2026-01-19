@@ -15,7 +15,7 @@
                     aria-label="Ouvrir le menu">
                 <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
+                    <path d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"/>
                 </svg>
             </button>
         </div>
@@ -44,8 +44,7 @@
                     Tableau de bord
                 </a>
             {% else %}
-                <a href="{{ path('app_login') }}"
-                   class="text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                <a href="{{ path('app_login') }}" class="text-sm font-semibold full-button-navy uppercase">
                     Connexion
                 </a>
             {% endif %}
@@ -58,16 +57,20 @@
          style="display: none;">
         <div class="border-t border-gray-200 bg-white">
             <div class="space-y-1 px-4 py-4">
-                <a href="{{ path('app_home') }}" class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50">
+                <a href="{{ path('app_home') }}"
+                   class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50">
                     Accueil
                 </a>
-                <a href="#apropos" class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50">
+                <a href="#apropos"
+                   class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50">
                     À propos
                 </a>
-                <a href="#services" class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50">
+                <a href="#services"
+                   class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50">
                     Services
                 </a>
-                <a href="#contact" class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50">
+                <a href="#contact"
+                   class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50">
                     Contact
                 </a>
 
@@ -78,8 +81,7 @@
                             Tableau de bord
                         </a>
                     {% else %}
-                        <a href="{{ path('app_login') }}"
-                           class="block rounded-md px-3 py-2 text-base font-semibold text-indigo-600 hover:bg-gray-50">
+                        <a href="#" class="text-sm font-semibold full-button-navy ">
                             Connexion
                         </a>
                     {% endif %}
