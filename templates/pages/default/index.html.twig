@@ -24,6 +24,11 @@
 
         <!-- Hero Section -->
         <section class="flex flex-col items-center justify-center text-center flex-grow px-6 py-24 bg-gradient-to-b from-[#0C325C]/90 to-[#F5F1E8] text-white relative overflow-hidden">
+            {% for message in app.flashes('success') %}
+                <div class="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-lg text-sm">
+                    {{ message }}
+                </div>
+            {% endfor %}
             <div class="absolute inset-0 bg-[url('{{ asset('images/concert-bg.jpg') }}')] bg-cover bg-center opacity-20"></div>
             <div class="relative z-10 max-w-2xl">
                 <h1 class="text-5xl md:text-6xl font-serif tracking-tight mb-6">
