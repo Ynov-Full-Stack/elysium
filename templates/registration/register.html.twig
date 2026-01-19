@@ -19,10 +19,42 @@
                 attr: { class: 'space-y-6' }
             }) }}
 
+            {# Prénom #}
+            {{ form_row(registrationForm.firstName, {
+                row_attr: { class: 'space-y-1' },
+                label: 'Prénom',
+                label_attr: { class: 'block text-sm font-medium text-[#4B5563]' },
+                attr: {
+                    class: 'w-full rounded-lg bg-white border border-[#D1D5DB] px-4 py-2.5 text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#C59A3A] focus:border-transparent transition'
+                }
+            }) }}
+
+            {# Nom #}
+            {{ form_row(registrationForm.lastName, {
+                row_attr: { class: 'space-y-1' },
+                label: 'Nom',
+                label_attr: { class: 'block text-sm font-medium text-[#4B5563]' },
+                attr: {
+                    class: 'w-full rounded-lg bg-white border border-[#D1D5DB] px-4 py-2.5 text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#C59A3A] focus:border-transparent transition'
+                }
+            }) }}
+
             {# Email #}
             {{ form_row(registrationForm.email, {
                 row_attr: { class: 'space-y-1' },
+                label: 'Email',
                 label_attr: { class: 'block text-sm font-medium text-[#4B5563]' },
+                attr: {
+                    class: 'w-full rounded-lg bg-white border border-[#D1D5DB] px-4 py-2.5 text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#C59A3A] focus:border-transparent transition'
+                }
+            }) }}
+
+            {# Date de naissance #}
+            {{ form_row(registrationForm.birthdate, {
+                row_attr: { class: 'space-y-1' },
+                label: 'Date de naissance',
+                label_attr: { class: 'block text-sm font-medium text-[#4B5563]' },
+                widget: 'single_text',
                 attr: {
                     class: 'w-full rounded-lg bg-white border border-[#D1D5DB] px-4 py-2.5 text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#C59A3A] focus:border-transparent transition'
                 }
@@ -41,6 +73,7 @@
             {# CGU #}
             {{ form_row(registrationForm.agreeTerms, {
                 row_attr: { class: 'flex items-center gap-2 text-sm text-[#4B5563]' },
+                label: 'J’accepte les conditions générales',
                 label_attr: { class: 'text-sm text-[#4B5563]' },
                 attr: {
                     class: 'h-4 w-4 rounded border-[#D1D5DB] text-[#0C325C] focus:ring-[#C59A3A]'
