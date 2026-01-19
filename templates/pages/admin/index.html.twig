@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Evénements{% endblock %}
+
+{% block body %}
+    <h1>Événements</h1>
+
+    {% for event in events %}
+        <p>
+            {{ event.name }}
+            <a href="{{ path('event_edit', { id: event.id }) }}">Modifier</a>
+        </p>
+        <form action="{{ path('event_delete', { id: event.id }) }}" method="post" style="display:inline">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ event.id) }}">
+            <button type="submit" onclick="return confirm('Voulez-vous vraiment supprimer cet événement ?')">
+                Supprimer
+            </button>
+        </form>
+    {% endfor %}
+{% endblock %}
