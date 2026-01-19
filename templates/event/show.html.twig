@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ event.nom }} - Elysium{% endblock %}
+
+{% block body %}
+<section class="py-16 bg-gradient-to-b from-[#FDFAF5]/50 to-[#FDFAF5]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {# Hero image #}
+        <div class="relative h-96 lg:h-[500px] rounded-3xl overflow-hidden mb-12 shadow-2xl">
+            <img src="https://picsum.photos/1200/600?random={{ event.id }}"
+                 alt="{{ event.nom }}"
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#163260]/70 via-transparent to-transparent"></div>
+            <div class="absolute bottom-8 left-8 right-8">
+                <span class="inline-block bg-[#C29757]/90 text-[#163260] px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                    {{ event.type|title }}
+                </span>
+                <h1 class="text-4xl lg:text-5xl font-black text-[#FDFAF5] leading-tight drop-shadow-2xl">
+                    {{ event.nom }}
+                </h1>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-12">
+            <div class="lg:col-span-2 space-y-8">
+                <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-[#163260]/10">
+                    <div class="flex flex-wrap gap-4 text-sm mb-8">
+                        <div class="flex items-center gap-2 bg-[#C29757]/10 text-[#C29757] px-4 py-2 rounded-xl">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
+                            </svg>
+                            {{ event.date|date('j F Y')}}
+                        </div>
+                        <div class="flex items-center gap-2 bg-[#163260]/10 text-[#163260] px-4 py-2 rounded-xl">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
