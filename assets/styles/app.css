@@ -37,6 +37,16 @@
 .full-button-gold:hover{
     background-color: var(--elysium-navy)!important;
 }
+.full-button-cream{
+    background-color: var(--elysium-cream)!important;
+    padding: .5rem 1rem;
+    border-radius: .5rem ;
+    color: var(--elysium-navy);
+}
+.full-button-cream:hover{
+    background-color: var(--elysium-navy)!important;
+    color: var(--elysium-cream);
+}
 .empty-button-gold{
     border: solid 1px var(--elysium-gold)!important;
     padding: .5rem 1rem;
