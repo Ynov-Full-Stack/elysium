@@ -18,3 +18,11 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+### Jetbrain ###
+.idea/
+.vscode/
+
+
+### macOS ###
+.DS_Store
