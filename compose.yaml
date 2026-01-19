@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-elysium}
       POSTGRES_USER: ${POSTGRES_USER:-elysium}
     ports:
-      - "35432:5432"
+      - "5432:5432"
     volumes:
       - database_data:/var/lib/postgresql/data:rw
 volumes:

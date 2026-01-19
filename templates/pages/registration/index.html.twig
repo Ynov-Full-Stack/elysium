@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription | Elysium{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen flex items-center justify-center bg-[#F5F1E8] px-4">
+        <div class="w-full max-w-md bg-white/90 rounded-2xl shadow-2xl p-8">
+
+            <h1 class="text-3xl text-center font-semibold text-[#0C325C] mb-2">
+                Rejoindre Elysium
+            </h1>
+            <p class="text-center text-sm text-[#7A6B56] mb-6">
+                Créez votre compte pour réserver l'exception
+            </p>
+
+            {% for message in app.flashes('success') %}
+                <div class="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-lg text-sm">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            {{ form_start(registrationForm, {
+                attr: {
+                    novalidate: 'novalidate',
+                    class: 'space-y-5'
+                }
+            }) }}
+
+            {% for field in [
+                registrationForm.firstName,
+                registrationForm.lastName,
+                registrationForm.email,
+                registrationForm.birthdate,
+                registrationForm.plainPassword
+            ] %}
+                <div>
+                    {{ form_label(field, null, { label_attr: { class: 'block text-sm font-medium mb-1' } }) }}
+                    {{ form_widget(field, {
+                        attr: {
+                            class: 'w-full rounded-lg border px-4 py-2.5 focus:ring-2 focus:ring-[#C59A3A] ' ~
+                            (field.vars.errors|length ? 'border-red-500' : 'border-gray-300')
+                        }
+                    }) }}
+                    {{ form_errors(field) }}
+                </div>
+            {% endfor %}
+
+            <div class="flex items-start gap-2 text-sm">
+                {{ form_widget(registrationForm.agreeTerms, { attr: { class: 'mt-1' } }) }}
+                {{ form_label(registrationForm.agreeTerms) }}
+            </div>
+            {{ form_errors(registrationForm.agreeTerms) }}
+
+            <button
+                id="submit-btn"
+                type="submit"
+                disabled
+                class="w-full mt-4 bg-[#0C325C] text-white py-3 rounded-lg flex items-center justify-center gap-2
+                   disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+                <span id="btn-text">S'inscrire</span>
+                <span id="spinner" class="hidden h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+            </button>
+
+            {{ form_end(registrationForm) }}
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('form');
+            const submitBtn = document.getElementById('submit-btn');
+            const spinner = document.getElementById('spinner');
+            const btnText = document.getElementById('btn-text');
+            const terms = document.querySelector('#{{ registrationForm.agreeTerms.vars.id }}');
+
+            function toggleButton() {
+                const requiredFilled = [...form.querySelectorAll('input[required]')]
+                    .every(input => input.value.trim() !== '');
+
+                submitBtn.disabled = !(requiredFilled && terms.checked);
+            }
+
+            form.addEventListener('input', toggleButton);
+            terms.addEventListener('change', toggleButton);
+
+            form.addEventListener('submit', e => {
+                if (submitBtn.disabled) {
+                    e.preventDefault();
+                    return;
+                }
+                submitBtn.disabled = true;
+                spinner.classList.remove('hidden');
+                btnText.textContent = 'Création du compte...';
+            });
+
+            toggleButton();
+        });
+    </script>
+{% endblock %}
