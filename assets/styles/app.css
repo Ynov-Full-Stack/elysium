@@ -28,3 +28,22 @@
 .full-button-navy:hover{
     background-color: var(--elysium-gold)!important;
 }
+.full-button-gold{
+    background-color: var(--elysium-gold)!important;
+    padding: .5rem 1rem;
+    border-radius: .5rem ;
+    color: var(--elysium-cream);
+}
+.full-button-gold:hover{
+    background-color: var(--elysium-navy)!important;
+}
+.empty-button-gold{
+    border: solid 1px var(--elysium-gold)!important;
+    padding: .5rem 1rem;
+    border-radius: .5rem ;
+    color: var(--elysium-gold);
+}
+.empty-button-gold:hover{
+    background-color: var(--elysium-gold) !important;
+    color: var(--elysium-cream)!important;
+}
