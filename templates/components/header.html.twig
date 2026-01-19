@@ -1,0 +1,92 @@
+<header class="background-cream border-b border-gray-200" x-data="{ open: false }">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8" aria-label="Navigation globale">
+        {# Logo #}
+        <div class="flex lg:flex-1">
+            <a href="{{ path('app_home') }}" class="-m-1.5 p-1.5 flex items-center gap-2">
+                <img src="{{ asset('img/logo.png') }}" alt="Logo" class="w-35">
+            </a>
+        </div>
+
+        {# Bouton menu mobile #}
+        <div class="flex lg:hidden">
+            <button type="button"
+                    class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+                    @click="open = !open"
+                    aria-label="Ouvrir le menu">
+                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"/>
+                </svg>
+            </button>
+        </div>
+
+        {# Menu desktop #}
+        <div class="hidden lg:flex lg:gap-x-8">
+            <a href="{{ path('app_home') }}" class="text-sm font-medium text-gray-700 hover:text-gray-900">
+                Accueil
+            </a>
+            <a href="#apropos" class="text-sm font-medium text-gray-700 hover:text-gray-900">
+                À propos
+            </a>
+            <a href="#services" class="text-sm font-medium text-gray-700 hover:text-gray-900">
+                Services
+            </a>
+            <a href="#contact" class="text-sm font-medium text-gray-700 hover:text-gray-900">
+                Contact
+            </a>
+        </div>
+
+        {# Actions utilisateur desktop #}
+        <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+            {% if app.user %}
+                <a href="{{ path('app_dashboard') }}"
+                   class="text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                    Tableau de bord
+                </a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="text-sm font-semibold full-button-navy uppercase">
+                    Connexion
+                </a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div x-show="open" x-cloak
+         class="lg:hidden"
+         @click.away="open = false"
+         style="display: none;">
+        <div class="border-t border-gray-200 bg-white">
+            <div class="space-y-1 px-4 py-4">
+                <a href="{{ path('app_home') }}"
+                   class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50">
+                    Accueil
+                </a>
+                <a href="#apropos"
+                   class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50">
+                    À propos
+                </a>
+                <a href="#services"
+                   class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50">
+                    Services
+                </a>
+                <a href="#contact"
+                   class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50">
+                    Contact
+                </a>
+
+                <div class="border-t border-gray-100 pt-3 mt-3">
+                    {% if app.user %}
+                        <a href="{{ path('app_dashboard') }}"
+                           class="block rounded-md px-3 py-2 text-base font-semibold text-indigo-600 hover:bg-gray-50">
+                            Tableau de bord
+                        </a>
+                    {% else %}
+                        <a href="#" class="text-sm font-semibold full-button-navy ">
+                            Connexion
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

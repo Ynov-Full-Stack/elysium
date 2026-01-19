@@ -1,2 +1,59 @@
 @import "tailwindcss";
 
+
+:root {
+    --elysium-navy: #163260;
+    --elysium-cream: #FDFAF5;
+    --elysium-gold: #C29757;
+}
+
+.background-navy{
+    background-color: var(--elysium-navy)!important;
+}
+
+.background-cream{
+    background-color: var(--elysium-cream) !important;
+}
+
+.background-gold {
+    background-color: var(--elysium-gold) !important;
+}
+
+.full-button-navy{
+    background-color: var(--elysium-navy)!important;
+    padding: .5rem 1rem;
+    border-radius: .5rem ;
+    color: var(--elysium-cream);
+}
+.full-button-navy:hover{
+    background-color: var(--elysium-gold)!important;
+}
+.full-button-gold{
+    background-color: var(--elysium-gold)!important;
+    padding: .5rem 1rem;
+    border-radius: .5rem ;
+    color: var(--elysium-cream);
+}
+.full-button-gold:hover{
+    background-color: var(--elysium-navy)!important;
+}
+.full-button-cream{
+    background-color: var(--elysium-cream)!important;
+    padding: .5rem 1rem;
+    border-radius: .5rem ;
+    color: var(--elysium-navy);
+}
+.full-button-cream:hover{
+    background-color: var(--elysium-navy)!important;
+    color: var(--elysium-cream);
+}
+.empty-button-gold{
+    border: solid 1px var(--elysium-gold)!important;
+    padding: .5rem 1rem;
+    border-radius: .5rem ;
+    color: var(--elysium-gold);
+}
+.empty-button-gold:hover{
+    background-color: var(--elysium-gold) !important;
+    color: var(--elysium-cream)!important;
+}
