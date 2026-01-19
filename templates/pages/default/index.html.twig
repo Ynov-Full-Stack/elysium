@@ -4,24 +4,6 @@
 
 {% block body %}
     <div class="min-h-screen bg-[#F5F1E8] flex flex-col">
-        <!-- Header -->
-        <header class="flex justify-between items-center p-6 max-w-7xl mx-auto w-full">
-            <div class="flex items-center gap-3">
-                <img src="{{ asset('images/logo-elysium.svg') }}" alt="Elysium" class="h-10">
-            </div>
-            <nav class="flex items-center gap-6 text-[#0C325C] font-medium">
-                <a href="{{ path('app_default') }}" class="hover:text-[#C59A3A] transition">Accueil</a>
-                <a href="#" class="hover:text-[#C59A3A] transition">Spectacles</a>
-                <a href="#" class="hover:text-[#C59A3A] transition">À propos</a>
-                {% if app.user %}
-                    <a href="#" class="bg-[#C59A3A] text-white px-4 py-2 rounded-lg hover:bg-[#b98a32] transition">Mon compte</a>
-                {% else %}
-                    <a href="{{ path('app_login') }}" class="text-[#0C325C] hover:underline">Connexion</a>
-                    <a href="{{ path('app_register') }}" class="bg-[#0C325C] text-white px-4 py-2 rounded-lg hover:bg-[#134072] transition">Inscription</a>
-                {% endif %}
-            </nav>
-        </header>
-
         <!-- Hero Section -->
         <section class="flex flex-col items-center justify-center text-center flex-grow px-6 py-24 bg-gradient-to-b from-[#0C325C]/90 to-[#F5F1E8] text-white relative overflow-hidden">
             {% for message in app.flashes('success') %}
@@ -73,12 +55,5 @@
 {#                {% endfor %}#}
             </div>
         </section>
-
-        <!-- Footer -->
-        <footer class="bg-[#0C325C] text-[#F5F1E8] py-10 text-center">
-            <p class="text-sm">
-                © {{ "now"|date("Y") }} Elysium — Réservez l’exception.
-            </p>
-        </footer>
     </div>
 {% endblock %}
