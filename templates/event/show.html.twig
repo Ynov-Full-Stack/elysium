@@ -3,40 +3,152 @@
 {% block title %}{{ event.nom }} - Elysium{% endblock %}
 
 {% block body %}
-<section class="py-16 bg-gradient-to-b from-[#FDFAF5]/50 to-[#FDFAF5]">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {# Hero image #}
-        <div class="relative h-96 lg:h-[500px] rounded-3xl overflow-hidden mb-12 shadow-2xl">
-            <img src="https://picsum.photos/1200/600?random={{ event.id }}"
-                 alt="{{ event.nom }}"
-                 class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-gradient-to-t from-[#163260]/70 via-transparent to-transparent"></div>
-            <div class="absolute bottom-8 left-8 right-8">
+    <section class="py-16 bg-gradient-to-b from-[#FDFAF5]/50 to-[#FDFAF5]">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="relative h-96 lg:h-[500px] rounded-3xl overflow-hidden mb-12 shadow-2xl">
+                <img src="https://picsum.photos/1200/600?random={{ event.id }}"
+                     alt="{{ event.nom }}"
+                     class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#163260]/70 via-transparent to-transparent"></div>
+                <div class="absolute bottom-8 left-8 right-8">
                 <span class="inline-block bg-[#C29757]/90 text-[#163260] px-4 py-2 rounded-full text-sm font-semibold mb-4">
                     {{ event.type|title }}
                 </span>
-                <h1 class="text-4xl lg:text-5xl font-black text-[#FDFAF5] leading-tight drop-shadow-2xl">
-                    {{ event.nom }}
-                </h1>
+                    <h1 class="text-4xl lg:text-5xl font-black text-[#FDFAF5] leading-tight drop-shadow-2xl">
+                        {{ event.nom }}
+                    </h1>
+                </div>
             </div>
-        </div>
 
-        <div class="grid lg:grid-cols-3 gap-12">
-            <div class="lg:col-span-2 space-y-8">
-                <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-[#163260]/10">
-                    <div class="flex flex-wrap gap-4 text-sm mb-8">
-                        <div class="flex items-center gap-2 bg-[#C29757]/10 text-[#C29757] px-4 py-2 rounded-xl">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
-                            </svg>
-                            {{ event.date|date('j F Y')}}
+            <div class="grid lg:grid-cols-3 gap-12">
+                <div class="lg:col-span-2 space-y-8">
+                    <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-[#163260]/10">
+                        <div class="flex flex-wrap gap-4 text-sm mb-8">
+                            <div class="flex items-center gap-2 bg-[#C29757]/10 text-[#C29757] px-4 py-2 rounded-xl">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM5 8V6h14v2H5z"/>
+                                </svg>
+                                <span class="font-medium">{{ event.date|date('j F Y') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2 bg-[#163260]/10 text-[#163260] px-4 py-2 rounded-xl">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                </svg>
+                                <span class="font-medium">{{ event.lieu }}</span>
+                            </div>
+                            <div class="flex items-center gap-2 bg-[#C29757]/10 text-[#C29757] px-4 py-2 rounded-xl">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                                </svg>
+                                <span class="font-medium">{{ event.heureDebut|date('H:i') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2 bg-[#163260]/10 text-[#163260] px-4 py-2 rounded-xl">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                                </svg>
+                                <span class="font-medium">{{ event.capacite }} places</span>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-2 bg-[#163260]/10 text-[#163260] px-4 py-2 rounded-xl">
+
+                        <div class="prose prose-lg max-w-none">
+                            <h2 class="text-2xl font-bold text-[#163260] mb-4">Description</h2>
+                            <p class="text-gray-700 leading-relaxed">
+                                {{ event.description }}
+                            </p>
+                        </div>
+                    </div>
+
+                    {% if event.organisateur is defined %}
+                        <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-[#163260]/10">
+                            <h3 class="text-xl font-bold text-[#163260] mb-4">Organisé par</h3>
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-[#C29757] rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                    {{ event.organisateur.nom|first|upper }}
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-[#163260]">{{ event.organisateur.nom }}</p>
+                                    {% if event.organisateur.email is defined %}
+                                        <p class="text-sm text-gray-600">{{ event.organisateur.email }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="lg:col-span-1">
+                    <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-[#163260]/10 sticky top-8">
+                        <div class="text-center mb-6">
+                            <p class="text-sm text-gray-600 mb-2">Tarif</p>
+                            <p class="text-4xl font-black text-[#163260]">
+                                {% if event.prix == 0 %}
+                                    Gratuit
+                                {% else %}
+                                    {{ event.prix }}€
+                                {% endif %}
+                            </p>
+                            <p class="text-sm text-gray-600 mt-1">par personne</p>
+                        </div>
+
+                        {% set placesRestantes = event.capacite - event.reservations|length %}
+                        <div class="mb-6">
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-gray-600">Places disponibles</span>
+                                <span class="font-semibold text-[#163260]">{{ placesRestantes }} / {{ event.capacite }}</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-[#C29757] h-2 rounded-full transition-all"
+                                     style="width: {{ (placesRestantes / event.capacite * 100)|round }}%"></div>
+                            </div>
+                        </div>
+
+                        {% if placesRestantes > 0 and event.date > date() %}
+                            <form method="post" action="#" class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-semibold text-[#163260] mb-2">
+                                        Nombre de places
+                                    </label>
+                                    <input type="number"
+                                           name="nombre_places"
+                                           min="1"
+                                           max="{{ placesRestantes }}"
+                                           value="1"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C29757] focus:border-transparent transition-all">
+                                </div>
+
+                                <button type="submit"
+                                        class="w-full bg-gradient-to-r from-[#163260] to-[#1e4178] hover:from-[#1e4178] hover:to-[#163260] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                                    Réserver maintenant
+                                </button>
+                            </form>
+                        {% elseif placesRestantes == 0 %}
+                            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-center">
+                                <p class="font-semibold">Complet</p>
+                                <p class="text-sm">Plus de places disponibles</p>
+                            </div>
+                        {% else %}
+                            <div class="bg-gray-50 border border-gray-200 text-gray-700 px-4 py-3 rounded-xl text-center">
+                                <p class="font-semibold">Événement passé</p>
+                            </div>
+                        {% endif %}
+
+                        <div class="mt-6 pt-6 border-t border-gray-200 space-y-3 text-sm text-gray-600">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-[#C29757]" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                </svg>
+                                <span>Confirmation instantanée</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-[#C29757]" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                </svg>
+                                <span>Annulation gratuite 48h avant</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 {% endblock %}
