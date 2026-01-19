@@ -8,9 +8,6 @@
 
             <!-- Logo / Titre -->
             <div class="text-center mb-8">
-                {# Si tu as un fichier logo, sinon laisse juste le titre #}
-                {# <img src="{{ asset('images/logo-elysium.svg') }}" alt="Elysium" class="mx-auto mb-4 h-10"> #}
-
                 <h1 class="text-3xl font-semibold tracking-wide text-[#0C325C]">
                     Elysium
                 </h1>
@@ -19,24 +16,27 @@
                 </p>
             </div>
 
-            <!-- Erreur -->
+            <!-- Erreur globale (fallback) -->
             {% if error %}
                 <div class="mb-4 rounded-lg bg-[#FDF2F2] border border-[#FCA5A5] text-[#B91C1C] px-4 py-3 text-sm">
-                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                    Identifiants incorrects. Veuillez réessayer.
                 </div>
             {% endif %}
 
             {% if app.user %}
                 <div class="mb-4 text-sm text-[#4B5563]">
                     Connecté en tant que <span class="font-medium text-[#0C325C]">{{ app.user.userIdentifier }}</span>,
-                    <a href="{{ logout_path() }}" class="text-[#C59A3A] hover:underline">
+                    <a href="{{ path('app_logout') }}" class="text-[#C59A3A] hover:underline">
                         Se déconnecter
                     </a>
                 </div>
             {% endif %}
 
+            {% set errorBorder = error ? 'border-[#FCA5A5]' : 'border-[#D1D5DB]' %}
+            {% set errorText   = error ? 'text-[#B91C1C]' : 'text-[#4B5563]' %}
+
             <!-- Formulaire -->
-            <form method="post" class="space-y-6">
+            <form method="post" id="login-form" class="space-y-4">
                 <div>
                     <label for="username" class="block text-sm font-medium text-[#4B5563] mb-1">
                         Email
@@ -49,8 +49,14 @@
                         autocomplete="email"
                         required
                         autofocus
-                        class="w-full rounded-lg bg-white border border-[#D1D5DB] px-4 py-2.5 text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#C59A3A] focus:border-transparent transition"
+                        class="w-full rounded-lg bg-white border {{ errorBorder }} px-4 py-2.5 text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#C59A3A] focus:border-transparent transition"
                     >
+
+                    {% if error %}
+                        <p class="mt-1 text-xs {{ errorText }}">
+                            Adresse email ou mot de passe incorrect.
+                        </p>
+                    {% endif %}
                 </div>
 
                 <div>
@@ -63,23 +69,25 @@
                         id="password"
                         autocomplete="current-password"
                         required
-                        class="w-full rounded-lg bg:white border border-[#D1D5DB] px-4 py-2.5 text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#C59A3A] focus:border-transparent transition"
+                        class="w-full rounded-lg bg-white border {{ errorBorder }} px-4 py-2.5 text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#C59A3A] focus:border-transparent transition"
                     >
                 </div>
 
                 <input
                     type="hidden"
                     name="_csrf_token"
-                    data-controller="csrf-protection"
                     value="{{ csrf_token('authenticate') }}"
                 >
 
                 <!-- Bouton -->
                 <button
                     type="submit"
-                    class="w-full rounded-lg bg-[#0C325C] hover:bg-[#134072] text-white font-medium py-3 transition shadow-lg shadow-[#0C325C]/30"
+                    id="login-submit"
+                    class="w-full rounded-lg bg-[#0C325C] hover:bg-[#134072] text-white font-medium py-3 transition shadow-lg shadow-[#0C325C]/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                    disabled
                 >
-                    Se connecter
+                    <span class="login-submit-text">Se connecter</span>
+                    <span class="login-spinner hidden ml-2 inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                 </button>
             </form>
 
@@ -89,4 +97,39 @@
             </div>
         </div>
     </div>
+
+    <script>
+        (function () {
+            const emailInput   = document.getElementById('username');
+            const passInput    = document.getElementById('password');
+            const submitButton = document.getElementById('login-submit');
+            const form         = document.getElementById('login-form');
+            const textSpan     = submitButton.querySelector('.login-submit-text');
+            const spinnerSpan  = submitButton.querySelector('.login-spinner');
+
+            function toggleButton() {
+                const hasEmail = emailInput.value.trim().length > 0;
+                const hasPass  = passInput.value.trim().length > 0;
+                submitButton.disabled = !(hasEmail && hasPass);
+            }
+
+            emailInput.addEventListener('input', toggleButton);
+            passInput.addEventListener('input', toggleButton);
+
+            form.addEventListener('submit', function () {
+                submitButton.disabled = true;
+                textSpan.textContent = 'Connexion...';
+                if (spinnerSpan) {
+                    spinnerSpan.style.display = 'inline-block';
+                }
+            });
+
+            // État initial : spinner caché + bouton désactivé
+            if (spinnerSpan) {
+                spinnerSpan.style.display = 'none';
+            }
+            toggleButton();
+        })();
+    </script>
+
 {% endblock %}
