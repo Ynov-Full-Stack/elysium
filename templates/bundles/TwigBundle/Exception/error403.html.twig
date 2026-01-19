@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accès interdit - Elysium{% endblock %}
+
+{% block body %}
+<div class="min-h-screen flex items-center justify-center bg-[#F5F1E8] px-4 py-12">
+    <div class="w-full max-w-md bg-white/90 backdrop-blur rounded-2xl shadow-2xl p-8 border border-[#E0D4BF] text-center">
+
+        <!-- Icône 403 -->
+        <div class="mx-auto w-24 h-24 bg-[#FDF2F2] border-2 border-[#FCA5A5] rounded-2xl flex items-center justify-center mb-6">
+            <svg class="w-12 h-12 text-[#B91C1C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+            </svg>
+        </div>
+
+        <!-- Titre -->
+        <h1 class="text-3xl font-semibold tracking-wide text-[#0C325C] mb-4">
+            403 - Accès interdit
+        </h1>
+
+        <p class="text-[#7A6B56] mb-6 leading-relaxed">
+            Vous n'avez pas les autorisations nécessaires pour accéder à cette page.
+        </p>
+
+        {% if app.user %}
+        <p class="text-sm text-[#B91C1C] mb-8 bg-[#FDF2F2] border border-[#FCA5A5] rounded-lg p-3">
+            Connecté en tant que : <span class="font-medium">{{ app.user.userIdentifier }}</span>
+        </p>
+        {% endif %}
+
+        <!-- Boutons -->
+        <div class="space-y-3">
+            {% if app.user %}
+            <a href="#"
+               class="block w-full bg-[#0C325C] hover:bg-[#134072] text-white font-medium py-3 px-6 rounded-lg transition shadow-lg shadow-[#0C325C]/30">
+                Mes événements
+            </a>
+            <a href="{{ path('app_logout') }}"
+               class="block w-full bg-[#FDF2F2] border border-[#FCA5A5] text-[#B91C1C] font-medium py-3 px-6 rounded-lg hover:bg-[#FCA5A5] hover:text-white transition">
+                Se déconnecter
+            </a>
+            {% else %}
+            <a href="{{ path('app_login') }}"
+               class="block w-full bg-[#0C325C] hover:bg-[#134072] text-white font-medium py-3 px-6 rounded-lg transition shadow-lg shadow-[#0C325C]/30">
+                Me connecter
+            </a>
+            <a href="{{ path('app_homepage') }}"
+               class="block w-full bg-white border-2 border-[#E0D4BF] text-[#0C325C] font-medium py-3 px-6 rounded-lg hover:bg-[#F5F1E8] transition">
+                Retour à l'accueil
+            </a>
+            {% endif %}
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-8 text-xs text-[#9CA3AF]">
+            © {{ "now"|date("Y") }} Elysium — Concerts & Spectacles
+        </div>
+    </div>
+</div>
+{% endblock %}
