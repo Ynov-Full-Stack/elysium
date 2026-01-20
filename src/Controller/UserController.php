@@ -2,70 +2,67 @@
 
 namespace App\Controller;
 
+use App\Form\ChangePasswordType;
+use App\Form\Model\ChangePassword;
+use App\Form\UserAccountType;
 use App\Repository\ReservationRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/user')]
 class UserController extends AbstractController
 {
     #[Route('/', name: 'app_user_index')]
-    public function index(): Response
+    public function index(ReservationRepository $reservationRepository): Response
     {
-        $stats = [
-            'upcoming' => 5,
-            'past' => 12,
-            'total_spent' => 850,
-            'points' => 420
-        ];
+        $user = $this->getUser();
 
-        $upcomingReservations = [
-            [
-                'event' => [
-                    'id' => 3,
-                    'nom' => 'Nuit Électro Premium',
-                    'type' => 'Concert',
-                    'date' => new \DateTime('+3 weeks'),
-                    'lieu' => 'Lyon 1er',
-                    'prix' => 45
-                ],
-                'nombrePlaces' => 2
-            ],
-            [
-                'event' => [
-                    'id' => 2,
-                    'nom' => 'Workshop Symfony Avancé',
-                    'type' => 'Formation',
-                    'date' => new \DateTime('+1 month'),
-                    'lieu' => 'Lyon 3e',
-                    'prix' => 89
-                ],
-                'nombrePlaces' => 1
-            ],
-            [
-                'event' => [
-                    'id' => 4,
-                    'nom' => 'Afterwork Startup',
-                    'type' => 'Afterwork',
-                    'date' => new \DateTime('tomorrow'),
-                    'lieu' => 'Part-Dieu',
-                    'prix' => 15
-                ],
-                'nombrePlaces' => 1
-            ]
-        ];
+        $stats = $reservationRepository->getAccountStat($user);
+
+        $upcomingReservations = $reservationRepository->getUpcomingReservations($user);
+
 
         return $this->render('pages/user/index.html.twig', [
             'stats' => $stats,
-            'upcoming_reservations' => $upcomingReservations
+            'upcomingReservations' => $upcomingReservations
         ]);
     }
 
     #[Route('/profil', name: 'app_user_profile')]
-    public function profile(): Response
+    public function profile(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
-        return $this->render('pages/user/profile.html.twig');
+        // user profil
+        $user = $this->getUser();
+        $form = $this->createForm(UserAccountType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($user);
+            $entityManager->flush();
+            $this->addFlash('success', 'Profile modifié avec succès.');
+            return $this->redirectToRoute('app_user_profile');
+        }
+
+        // password
+        $changePassword = new ChangePassword();
+        $passwordForm = $this->createForm(ChangePasswordType::class, $changePassword);
+        $passwordForm->handleRequest($request);
+        if ($passwordForm->isSubmitted() && $passwordForm->isValid()) {
+            $user->setPassword($passwordHasher->hashPassword($user, $changePassword->getNewPassword()));
+            $entityManager->persist($user);
+            $entityManager->flush();
+            $this->addFlash('success', 'Mot de passe modifié avec succès.');
+            return $this->redirectToRoute('app_user_profile');
+        }
+
+
+        return $this->render('pages/user/profile.html.twig', [
+            'form' => $form->createView(),
+            'passwordForm' => $passwordForm->createView()
+        ]);
     }
 
     #[Route('/reservations', name: 'app_user_reservations')]
