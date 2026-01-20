@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h2>{% block title %}{% endblock %}</h2>
+
+    <div>
+        {% block content %}{% endblock %}
+    </div>
+
+    <hr>
+    <p>
+        © {{ "now"|date("Y") }} Elysium — This is an automated email.
+    </p>
+</body>
+</html>
