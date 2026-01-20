@@ -21,7 +21,7 @@ final class EventController extends AbstractController
             ['id' => 6, 'nom' => 'Hackathon 24h', 'description' => 'Codez votre solution avec mentors experts.', 'date' => new \DateTime('+4 weeks'), 'lieu' => 'Lyon 7e', 'prix' => 0, 'type' => 'Hackathon'],
         ];
 
-        return $this->render('event/index.html.twig', [
+        return $this->render('pages/event/index.html.twig', [
             'events' => $events,
         ]);
     }
@@ -140,7 +140,7 @@ final class EventController extends AbstractController
             throw $this->createNotFoundException('Événement non trouvé');
         }
 
-        return $this->render('event/show.html.twig', [
+        return $this->render('pages/event/show.html.twig', [
             'event' => $event,
         ]);
     }
