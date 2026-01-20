@@ -10,7 +10,8 @@
         <a href="#" class="hover:text-[#C59A3A] transition">Concert</a>
         <a href="#" class="hover:text-[#C59A3A] transition">Autre évènements</a>
         {% if app.user %}
-            <a href="#">
+            {% dump(app.user) %}
+            <a href="{{ path('app_user_index')}}">
                     {% include 'icons/user-full.svg' %}
             </a>
         {% else %}
