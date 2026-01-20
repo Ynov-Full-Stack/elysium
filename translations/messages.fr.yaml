@@ -1,0 +1,13 @@
+event_type:
+    concert: 'Concert'
+    spectacle: 'Spectacle'
+    conference: 'Conférence'
+    workshop: 'Atelier'
+    festival: 'Festival'
+    theater: 'Théâtre'
+    sport: 'Événement Sportif'
+    exhibition: 'Exposition'
+    party: 'Soirée'
+    training: 'Formation'
+    gala: 'Gala'
+    other: 'Autre'
