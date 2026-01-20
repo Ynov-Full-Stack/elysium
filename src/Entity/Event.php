@@ -22,9 +22,6 @@ class Event
     #[ORM\Column(length: 180)]
     private ?string $name = null;
 
-    #[ORM\Column]
-    private ?int $placeNumber = null;
-
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
@@ -39,9 +36,6 @@ class Event
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $registrationEndAt = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $place = null;
 
     #[ORM\Column]
     private ?float $price = null;
@@ -62,6 +56,24 @@ class Event
     #[ORM\Column(enumType: EventType::class)]
     private ?EventType $type = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $venueName = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $streetNumber = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $street = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $postalCode = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $city = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $country = null;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -80,18 +92,6 @@ class Event
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getPlaceNumber(): ?int
-    {
-        return $this->placeNumber;
-    }
-
-    public function setPlaceNumber(int $placeNumber): static
-    {
-        $this->placeNumber = $placeNumber;
 
         return $this;
     }
@@ -152,18 +152,6 @@ class Event
     public function setRegistrationEndAt(?\DateTimeImmutable $registrationEndAt): static
     {
         $this->registrationEndAt = $registrationEndAt;
-
-        return $this;
-    }
-
-    public function getPlace(): ?string
-    {
-        return $this->place;
-    }
-
-    public function setPlace(?string $place): static
-    {
-        $this->place = $place;
 
         return $this;
     }
@@ -242,6 +230,78 @@ class Event
     public function setType(EventType $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getVenueName(): ?string
+    {
+        return $this->venueName;
+    }
+
+    public function setVenueName(?string $venueName): static
+    {
+        $this->venueName = $venueName;
+
+        return $this;
+    }
+
+    public function getStreetNumber(): ?string
+    {
+        return $this->streetNumber;
+    }
+
+    public function setStreetNumber(?string $streetNumber): static
+    {
+        $this->streetNumber = $streetNumber;
+
+        return $this;
+    }
+
+    public function getStreet(): ?string
+    {
+        return $this->street;
+    }
+
+    public function setStreet(?string $street): static
+    {
+        $this->street = $street;
+
+        return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(?string $postalCode): static
+    {
+        $this->postalCode = $postalCode;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?string $country): static
+    {
+        $this->country = $country;
 
         return $this;
     }
