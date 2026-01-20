@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\ReservationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -68,38 +69,10 @@ class UserController extends AbstractController
     }
 
     #[Route('/reservations', name: 'app_user_reservations')]
-    public function reservations(): Response
+    public function reservations(ReservationRepository $reservationRepository): Response
     {
-        // Simulation de toutes les réservations
-        $reservations = [
-            [
-                'event' => [
-                    'nom' => 'Nuit Électro Premium',
-                    'type' => 'Concert',
-                    'date' => new \DateTime('+3 weeks'),
-                    'lieu' => 'Lyon 1er'
-                ],
-                'nombrePlaces' => 2
-            ],
-            [
-                'event' => [
-                    'nom' => 'Workshop Symfony Avancé',
-                    'type' => 'Formation',
-                    'date' => new \DateTime('+1 month'),
-                    'lieu' => 'Lyon 3e'
-                ],
-                'nombrePlaces' => 1
-            ],
-            [
-                'event' => [
-                    'nom' => 'Spectacle Art & Tech',
-                    'type' => 'Spectacle',
-                    'date' => new \DateTime('-1 week'),
-                    'lieu' => 'Confluence'
-                ],
-                'nombrePlaces' => 1
-            ]
-        ];
+
+        $reservations = $reservationRepository->findBy(['user' => $this->getUser()], ['createdAt' => 'DESC']);
 
         $pagination = [
             'currentPage' => 1,
