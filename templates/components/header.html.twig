@@ -10,7 +10,9 @@
         <a href="#" class="hover:text-[#C59A3A] transition">Concert</a>
         <a href="#" class="hover:text-[#C59A3A] transition">Autre évènements</a>
         {% if app.user %}
-            <a href="#" class="bg-[#C59A3A] text-white px-4 py-2 rounded-lg hover:bg-[#b98a32] transition">Mon compte</a>
+            <a href="#">
+                    {% include 'icons/user-full.svg' %}
+            </a>
         {% else %}
             <a href="{{ path('app_login') }}" class="text-[#0C325C] hover:underline">Connexion</a>
             <a href="{{ path('app_register') }}" class="bg-[#0C325C] text-white px-4 py-2 rounded-lg hover:bg-[#134072] transition">Inscription</a>
