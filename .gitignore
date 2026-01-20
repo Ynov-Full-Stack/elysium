@@ -27,3 +27,8 @@ composer.lock
 
 ### macOS ###
 .DS_Store
+
+
+#.env
+
+.env
