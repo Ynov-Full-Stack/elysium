@@ -62,7 +62,7 @@
 
             <div class="space-y-4">
                 {% for reservation in upcomingReservations %}
-                    <a href="{{ path('app_event_show', {'id' : reservation.event.id}) }}" class="group flex items-center gap-6 p-6 background-cream rounded-2xl border border-[#C29757]/10 hover:shadow-lg transition-all duration-300">
+                    <a href="{{ path('app_event_show', {'id' : reservation.event.id | nzo_encrypt }) }}" class="group flex items-center gap-6 p-6 background-cream rounded-2xl border border-[#C29757]/10 hover:shadow-lg transition-all duration-300">
                         <div class="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0">
                             <img src="https://picsum.photos/200/200" alt="{{ reservation.event.name }}" class="w-full h-full object-cover">
                         </div>
