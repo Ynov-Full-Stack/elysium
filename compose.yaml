@@ -9,11 +9,13 @@ services:
       - "5432:5432"
     volumes:
       - database_data:/var/lib/postgresql/data:rw
+
   adminer:
     image: adminer
     restart: always
     ports:
       - '29080:8080'
+
   keycloak:
     #image: jboss/keycloak:latest
     image: mihaibob/keycloak:18.0.2-legacy
@@ -31,5 +33,12 @@ services:
       - "8080:8080"
     depends_on:
       - database
+
+  mailer:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # Web UI
+
 volumes:
   database_data:
