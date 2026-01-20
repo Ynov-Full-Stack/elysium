@@ -3,8 +3,14 @@
 {% block title %}{{ event.name }} - Elysium{% endblock %}
 
 {% block body %}
+
     <section class="py-16 bg-gradient-to-b from-[#FDFAF5]/50 to-[#FDFAF5]">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-4">
+                <a href="{{ previousUrl ?? path('app_event_index') }}" class="flex gap-2 align-center text-[#163260] font-semibold">
+                    {% include'icons/arrow-left-short.svg' %} Retour
+                </a>
+            </div>
             <div class="relative h-96 lg:h-[500px] rounded-3xl overflow-hidden mb-12 shadow-2xl">
                 <img src="https://picsum.photos/1200/600?random={{ event.id }}"
                      alt="{{ event.name }}"

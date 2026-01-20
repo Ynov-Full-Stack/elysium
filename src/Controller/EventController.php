@@ -6,6 +6,7 @@ use App\Entity\Event;
 use App\Repository\EventRepository;
 use Nzo\UrlEncryptorBundle\Annotations\ParamDecryptor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -25,7 +26,7 @@ final class EventController extends AbstractController
 
     #[Route('/show/{id}', name: 'app_event_show')]
     #[ParamDecryptor(['id'])]
-    public function show(EventRepository $eventRepository, $id): Response
+    public function show(EventRepository $eventRepository, $id, Request $request): Response
     {
         $event = $eventRepository->find(['id' => $id]);
 
@@ -35,6 +36,7 @@ final class EventController extends AbstractController
 
         return $this->render('pages/event/show.html.twig', [
             'event' => $event,
+            'previousUrl' => $request->headers->get('referer'),
         ]);
     }
 
