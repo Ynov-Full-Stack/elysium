@@ -21,7 +21,7 @@ class EventType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void {
         $builder
             ->add('name', TextType::class)
-            ->add('placeNumber', IntegerType::class, [
+            ->add('totalSeats', IntegerType::class, [
                 'required' => true,
                 'label' => 'Event Capacity',
                 'attr' => [
