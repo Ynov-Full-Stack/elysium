@@ -28,6 +28,10 @@ class EventRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('e');
 
+        // just futur event and not past
+        $qb->andWhere('e.eventDate >= :now')
+            ->setParameter('now', new \DateTime());
+
         if ($search = $request->query->get('search')) {
             $qb->andWhere('e.name LIKE :search')->setParameter('search', "%$search%");
         }
