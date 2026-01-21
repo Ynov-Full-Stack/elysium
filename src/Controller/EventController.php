@@ -14,13 +14,24 @@ use Symfony\Component\Routing\Attribute\Route;
 final class EventController extends AbstractController
 {
     #[Route('/', name: 'app_event_index')]
-    public function index(EventRepository $eventRepository): Response
+    public function index(EventRepository $eventRepository, Request $request): Response
     {
-        // add condition for show just futur event, and route condition with type
-        $events = $eventRepository->findAll();
+        $page = max(1, $request->query->getInt('page', 1));
+        $limit = 12;
+        $data = $eventRepository->findFilteredPaginated($request, $page, $limit);
+        $cities = $eventRepository->findDistinctLieux();
+        $types = $eventRepository->findDistinctTypes();
 
         return $this->render('pages/event/index.html.twig', [
-            'events' => $events,
+            'events' => $data['events'],
+            'pagination' => [
+                'currentPage' => $data['currentPage'],
+                'totalPages' => $data['totalPages'],
+                'totalItems' => $data['totalItems'],
+                'itemsPerPage' => $limit
+            ],
+            'cities' => $cities,
+            'types' => $types
         ]);
     }
 
@@ -34,18 +45,9 @@ final class EventController extends AbstractController
             throw $this->createNotFoundException('Événement non trouvé');
         }
 
-        // remaining seat
-        $reservedSeats = 0;
-        foreach ($event->getReservations() as $reservation) {
-            $reservedSeats += $reservation->getSeatQuantity();
-        }
-
-        $remainingSeat = $event->getTotalSeats() - $reservedSeats;
-
 
         return $this->render('pages/event/show.html.twig', [
             'event' => $event,
-            'remainingSeats' => $remainingSeat,
             'previousUrl' => $request->headers->get('referer'),
         ]);
     }
