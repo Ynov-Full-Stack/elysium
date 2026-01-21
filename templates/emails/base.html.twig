@@ -4,15 +4,18 @@
     <meta charset="UTF-8">
 </head>
 <body>
-    <h2>{% block title %}{% endblock %}</h2>
+    <div style="margin: 0 auto; max-width: 600px; padding: 20px; font-family: Arial, sans-serif; color: #333;">
+        <h2 style="margin-top: 0; font-size: 24px; text-align: center; color: #b91c1c;">
+            {% block title %}{% endblock %}
+        </h2>
+        <div>
+            {% block content %}{% endblock %}
+        </div>
 
-    <div>
-        {% block content %}{% endblock %}
+        <hr>
+        <p>
+            © {{ "now"|date("Y") }} Elysium — This is an automated email.
+        </p>
     </div>
-
-    <hr>
-    <p>
-        © {{ "now"|date("Y") }} Elysium — This is an automated email.
-    </p>
 </body>
 </html>

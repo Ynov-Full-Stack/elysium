@@ -21,7 +21,9 @@ class MailMessageHandler
             ->to($message->to)
             ->subject($message->subject)
             ->htmlTemplate($message->template)
-            ->context($message->context);
+            ->context([
+                'ctx' => $message->context,
+            ]);
 
         $this->mailer->send($email);
     }
