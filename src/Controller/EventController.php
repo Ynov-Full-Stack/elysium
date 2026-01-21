@@ -16,10 +16,11 @@ final class EventController extends AbstractController
     #[Route('/', name: 'app_event_index')]
     public function index(EventRepository $eventRepository, Request $request): Response
     {
+        // TODO : afficher uniquement ceux qui sont à venir, pas les passés
         $page = max(1, $request->query->getInt('page', 1));
         $limit = 12;
         $data = $eventRepository->findFilteredPaginated($request, $page, $limit);
-        $cities = $eventRepository->findDistinctLieux();
+        $cities = $eventRepository->findDistinctCities();
         $types = $eventRepository->findDistinctTypes();
 
         return $this->render('pages/event/index.html.twig', [
@@ -44,7 +45,6 @@ final class EventController extends AbstractController
         if (!$event) {
             throw $this->createNotFoundException('Événement non trouvé');
         }
-
 
         return $this->render('pages/event/show.html.twig', [
             'event' => $event,
