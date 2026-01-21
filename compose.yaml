@@ -9,5 +9,10 @@ services:
       - "5432:5432"
     volumes:
       - database_data:/var/lib/postgresql/data:rw
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - '29080:8080'
 volumes:
   database_data:
