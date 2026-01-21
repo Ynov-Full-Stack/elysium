@@ -74,6 +74,9 @@ class Event
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $country = null;
 
+    #[ORM\Column(length: 20)]
+    private ?string $status = 'en cours';
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -315,5 +318,17 @@ class Event
         }
 
         return $this->totalSeats - $reserved;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
     }
 }

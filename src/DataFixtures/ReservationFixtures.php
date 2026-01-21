@@ -56,6 +56,7 @@ class ReservationFixtures extends Fixture implements DependentFixtureInterface
             $reservation->setEvent($event);
             $reservation->setUser($users[$i % 3]);
             $reservation->setSeatQuantity($faker->numberBetween(1, 4));
+            $reservation->setStatus($faker->randomElement(['en cours', 'annulé']));
             $manager->persist($reservation);
         }
 
