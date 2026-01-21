@@ -23,11 +23,11 @@
         </div>
         <div class="flex items-center justify-between pt-4 border-t border-[#163260]/10 mt-auto">
             <span class="text-2xl font-black text-[#C29757]">{{ event.price }}€</span>
-            {% if event.remainingSeats > 0 %}
+            {% if event.remainingSeats > 0 and event.registrationEndAt > date('now') %}
                 <span class="empty-button-gold text-sm">
             Participer
         </span>
-            {% elseif event.registrationEndAt and event.registrationEndAt < 'now'|date() %}
+            {% elseif event.registrationEndAt and event.registrationEndAt < date('now') %}
                 <span class="text-red-600 font-semibold text-sm">
             Réservation fermé
         </span>
