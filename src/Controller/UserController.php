@@ -68,6 +68,7 @@ class UserController extends AbstractController
     #[Route('/reservations', name: 'app_user_reservations')]
     public function reservations(ReservationRepository $reservationRepository): Response
     {
+        // add annulation
 
         $reservations = $reservationRepository->findBy(['user' => $this->getUser()], ['createdAt' => 'DESC']);
 
@@ -85,6 +86,7 @@ class UserController extends AbstractController
     #[Route('/preferences', name: 'app_user_preferences')]
     public function preferences(): Response
     {
+        // inside add delete account, newsletter,
         return $this->render('pages/user/preferences.html.twig');
     }
 }

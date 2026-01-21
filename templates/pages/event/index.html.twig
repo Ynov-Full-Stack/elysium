@@ -3,14 +3,230 @@
 {% block title %}Événements Elysium{% endblock %}
 
 {% block body %}
-    <div class="py-12 min-h-screen">
+    <div class="py-12 min-h-screen bg-gradient-to-b from-[#FDFAF5]/50 to-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-4xl font-bold text-gray-900 mb-12 text-center uppercase">Tous nos événements</h1>
+            <div class="text-center mb-12">
+                <h1 class="text-4xl lg:text-5xl font-black text-[#163260] mb-4 uppercase">Tous nos événements</h1>
+                <p class="text-lg text-[#163260]/60">Découvrez les meilleurs événements premium à Lyon</p>
+            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                {% for event in events %}
-                    {% include '/components/_event-card.html.twig' %}
-                {% endfor %}
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <!-- Sidebar Filtres -->
+                <aside class="lg:col-span-1">
+                    <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-[#C29757]/20">
+                        <h2 class="text-2xl font-black text-[#163260] mb-6 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-[#C29757]" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+                            </svg>
+                            Filtres
+                        </h2>
+
+                        <form method="get" action="{{ path('app_event_index') }}" class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-[#163260] mb-2">
+                                    Rechercher
+                                </label>
+                                <div class="relative">
+                                    <input
+                                        type="text"
+                                        name="search"
+                                        value="{{ app.request.get('search') }}"
+                                        placeholder="Nom de l'événement..."
+                                        class="w-full pl-10 pr-4 py-3 border border-[#C29757]/30 rounded-xl focus:ring-2 focus:ring-[#C29757] focus:border-transparent transition-all"
+                                    >
+                                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#163260]/40" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-[#163260] mb-3">
+                                    Type d'événement
+                                </label>
+                                <div class="space-y-2">
+                                    {% for typeName in types %}
+                                        <label class="flex items-center p-3 bg-[#FDFAF5] rounded-xl cursor-pointer hover:shadow-md transition-all">
+                                            <input type="checkbox" name="types[]" value="{{ typeName }}"
+                                                {% if typeName in app.request.get('types', []) %}checked{% endif %}
+                                                   class="w-4 h-4 text-[#C29757] rounded focus:ring-[#C29757]">
+                                            <span class="ml-3 text-sm font-medium text-[#163260]">
+            {{ typeName|lower|title }}
+        </span>
+                                        </label>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                            <!-- Prix -->
+                            <div>
+                                <label class="block text-sm font-semibold text-[#163260] mb-3">
+                                    Prix maximum
+                                </label>
+                                <div class="space-y-3">
+                                    <input
+                                        type="range"
+                                        name="max_price"
+                                        min="0"
+                                        max="200"
+                                        step="10"
+                                        value="{{ app.request.get('max_price', 500) }}"
+                                        class="w-full h-2 bg-[#C29757]/20 rounded-lg appearance-none cursor-pointer accent-[#C29757]"
+                                        oninput="this.nextElementSibling.textContent = this.value + '€'"
+                                    >
+                                    <div class="text-center font-bold text-[#C29757] text-lg">
+                                        {{ app.request.get('max_price', 200) }}€
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Date -->
+                            <div>
+                                <label class="block text-sm font-semibold text-[#163260] mb-2">
+                                    À partir du
+                                </label>
+                                <input
+                                    type="date"
+                                    name="date_from"
+                                    value="{{ app.request.get('date_from') }}"
+                                    class="w-full px-4 py-3 border border-[#C29757]/30 rounded-xl focus:ring-2 focus:ring-[#C29757] focus:border-transparent transition-all"
+                                >
+                            </div>
+
+                            <!-- City -->
+                            <div>
+                                <label class="block text-sm font-semibold text-[#163260] mb-2">
+                                    Ville
+                                </label>
+                                <select name="city" class="w-full px-4 py-3 border border-[#C29757]/30 rounded-xl focus:ring-2 focus:ring-[#C29757] focus:border-transparent transition-all"
+                                >
+                                    <option value="">Toute les villes</option>
+                                    {% for city in cities %}
+                                        <option value="{{ city }}" {% if app.request.get('city') == city %}selected{% endif %}>{{ city }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Boutons -->
+                            <div class="space-y-3 pt-4 border-t border-[#C29757]/20">
+                                <button
+                                    type="submit"
+                                    class="w-full bg-gradient-to-r from-[#163260] to-[#1e4178] hover:from-[#1e4178] hover:to-[#163260] text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                                >
+                                    Appliquer les filtres
+                                </button>
+
+                                <a
+                                    href="{{ path('app_event_index') }}"
+                                    class="block w-full text-center bg-[#FDFAF5] hover:bg-[#C29757]/10 text-[#163260] font-semibold py-3 rounded-xl border border-[#C29757]/30 transition-all"
+                                >
+                                    Réinitialiser
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </aside>
+
+                <!-- Event listing -->
+                <div class="lg:col-span-3">
+                    <div class="flex items-center justify-between mb-6">
+                        <p class="text-[#163260]/60 font-medium">
+                            <span class="font-bold text-[#C29757]">{{ events|length }}</span> événement{{ events|length > 1 ? 's' : '' }} trouvé{{ events|length > 1 ? 's' : '' }}
+                        </p>
+
+                        <select
+                            name="sort"
+                            onchange="this.form.submit()"
+                            class="px-4 py-2 border border-[#C29757]/30 rounded-xl focus:ring-2 focus:ring-[#C29757] focus:border-transparent transition-all text-sm"
+                        >
+                            <option value="date_asc">Date (croissant)</option>
+                            <option value="date_desc">Date (décroissant)</option>
+                            <option value="price_asc">Prix (croissant)</option>
+                            <option value="price_desc">Prix (décroissant)</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        {% for event in events %}
+                            {% include '/components/_event-card.html.twig' %}
+                        {% else %}
+                            <div class="col-span-full text-center py-16">
+                                <svg class="w-24 h-24 mx-auto text-[#163260]/20 mb-4" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                                </svg>
+                                <h3 class="text-2xl font-bold text-[#163260] mb-2">Aucun événement trouvé</h3>
+                                <p class="text-[#163260]/60 mb-6">Essayez de modifier vos critères de recherche</p>
+                                <a href="{{ path('app_event_index') }}" class="inline-block bg-[#C29757] hover:bg-[#d4a562] text-white font-bold px-6 py-3 rounded-xl transition-all">
+                                    Voir tous les événements
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Pagination -->
+                    {% if pagination.totalPages > 1 %}
+                        <div class="mt-12 flex justify-center items-center gap-2">
+                            {% if pagination.currentPage > 1 %}
+                                <a href="{{ path('app_event_index', app.request.query.all|merge({'page': pagination.currentPage - 1})) }}"
+                                   class="flex items-center gap-2 px-4 py-3 bg-white/80 hover:bg-[#C29757] text-[#163260] hover:text-white font-semibold rounded-xl border border-[#C29757]/30 transition-all duration-300 shadow-md hover:shadow-xl">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                                    </svg>
+                                    Précédent
+                                </a>
+                            {% else %}
+                                <span class="flex items-center gap-2 px-4 py-3 bg-gray-100 text-gray-400 font-semibold rounded-xl border border-gray-200 cursor-not-allowed">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                                </svg>
+                                Précédent
+                            </span>
+                            {% endif %}
+
+                            <div class="flex gap-2">
+                                {% for page in 1..pagination.totalPages %}
+                                    {% if page == 1 or page == pagination.totalPages or (page >= pagination.currentPage - 2 and page <= pagination.currentPage + 2) %}
+                                        <a href="{{ path('app_event_index', app.request.query.all|merge({'page': page})) }}"
+                                           class="w-12 h-12 flex items-center justify-center rounded-xl font-bold transition-all duration-300 shadow-md
+                                              {% if page == pagination.currentPage %}
+                                                  bg-gradient-to-r from-[#C29757] to-[#d4a562] text-white shadow-xl scale-110
+                                              {% else %}
+                                                  bg-white/80 hover:bg-[#FDFAF5] text-[#163260] hover:shadow-xl hover:scale-105 border border-[#C29757]/30
+                                              {% endif %}">
+                                            {{ page }}
+                                        </a>
+                                    {% elseif page == pagination.currentPage - 3 or page == pagination.currentPage + 3 %}
+                                        <span class="w-12 h-12 flex items-center justify-center text-[#163260]/40 font-bold">...</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
+                            {% if pagination.currentPage < pagination.totalPages %}
+                                <a href="{{ path('app_event_index', app.request.query.all|merge({'page': pagination.currentPage + 1})) }}"
+                                   class="flex items-center gap-2 px-4 py-3 bg-white/80 hover:bg-[#C29757] text-[#163260] hover:text-white font-semibold rounded-xl border border-[#C29757]/30 transition-all duration-300 shadow-md hover:shadow-xl">
+                                    Suivant
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                                    </svg>
+                                </a>
+                            {% else %}
+                                <span class="flex items-center gap-2 px-4 py-3 bg-gray-100 text-gray-400 font-semibold rounded-xl border border-gray-200 cursor-not-allowed">
+                                Suivant
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                                </svg>
+                            </span>
+                            {% endif %}
+                        </div>
+
+                        <div class="mt-6 text-center">
+                            <p class="text-sm text-[#163260]/60">
+                                Page <span class="font-bold text-[#C29757]">{{ pagination.currentPage }}</span> sur <span class="font-bold text-[#C29757]">{{ pagination.totalPages }}</span>
+                                <span class="mx-2">•</span>
+                                <span class="font-semibold">{{ pagination.totalItems }}</span> événements au total
+                            </p>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

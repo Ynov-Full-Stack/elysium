@@ -23,7 +23,15 @@
         </div>
         <div class="flex items-center justify-between pt-4 border-t border-[#163260]/10 mt-auto">
             <span class="text-2xl font-black text-[#C29757] drop-shadow-sm">{{ event.price }}€</span>
-            <span class="empty-button-gold text-sm">Participer</span>
+            {% if event.remainingSeats > 0 %}
+                <span class="empty-button-gold text-sm">
+            Participer
+        </span>
+            {% else %}
+                <span class="text-red-600 font-semibold text-sm">
+            Complet
+        </span>
+            {% endif %}
         </div>
     </div>
 </a>

@@ -212,15 +212,15 @@
                         <div class="mb-6">
                             <div class="flex justify-between text-sm mb-2">
                                 <span class="text-gray-600">Places disponibles</span>
-                                <span class="font-semibold text-[#163260]">{{ remainingSeats }} / {{ event.totalSeats }}</span>
+                                <span class="font-semibold text-[#163260]">{{ event.remainingSeats }} / {{ event.totalSeats }}</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
                                 <div class="bg-[#C29757] h-2 rounded-full transition-all"
-                                     style="width: {{ (remainingSeats / event.totalSeats * 100)|round }}%"></div>
+                                     style="width: {{ (event.remainingSeats / event.totalSeats * 100)|round }}%"></div>
                             </div>
                         </div>
 
-                        {% if remainingSeats > 0 and event.eventDate > date() %}
+                        {% if event.remainingSeats > 0 and event.eventDate > date() %}
                             <form method="post" action="#" class="space-y-4">
                                 <div>
                                     <label class="block text-sm font-semibold text-[#163260] mb-2">
@@ -229,7 +229,7 @@
                                     <input type="number"
                                            name="nombre_places"
                                            min="1"
-                                           max="{{ remainingSeats }}"
+                                           max="{{ event.remainingSeats }}"
                                            value="1"
                                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C29757] focus:border-transparent transition-all">
                                 </div>
@@ -239,7 +239,7 @@
                                     Réserver maintenant
                                 </button>
                             </form>
-                        {% elseif remainingSeats == 0 %}
+                        {% elseif event.remainingSeats == 0 %}
                             <div class="bg-gray-50 border border-gray-200 text-gray-700 px-4 py-3 rounded-xl text-center">
                                 <p class="font-semibold">Complet</p>
                                 <p class="text-sm">Plus de places disponibles</p>

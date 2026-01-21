@@ -305,4 +305,15 @@ class Event
 
         return $this;
     }
+
+    public function getRemainingSeats(): int
+    {
+        $reserved = 0;
+
+        foreach ($this->reservations as $reservation) {
+            $reserved += $reservation->getSeatQuantity();
+        }
+
+        return $this->totalSeats - $reserved;
+    }
 }
