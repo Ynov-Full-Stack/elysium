@@ -25,22 +25,22 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Prénom',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank(['message' => 'Veuillez renseigner votre prénom.']),
+                    new NotBlank(message: 'Veuillez renseigner votre prénom.'),
                 ],
             ])
             ->add('lastName', TextType::class, [
                 'label' => 'Nom',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank(['message' => 'Veuillez renseigner votre nom.']),
+                    new NotBlank(message: 'Veuillez renseigner votre nom.'),
                 ],
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank(['message' => 'Veuillez renseigner votre email.']),
-                    new Email(['message' => 'Email invalide.']),
+                    new NotBlank(message: 'Veuillez renseigner votre email.'),
+                    new Email(message: 'Email invalide.'),
                 ],
             ])
             ->add('birthdate', DateType::class, [
@@ -48,7 +48,7 @@ class RegistrationFormType extends AbstractType
                 'widget' => 'single_text',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank(['message' => 'Veuillez renseigner votre date de naissance.']),
+                    new NotBlank(message: 'Veuillez renseigner votre date de naissance.'),
                 ],
             ])
             ->add('plainPassword', PasswordType::class, [
@@ -57,12 +57,8 @@ class RegistrationFormType extends AbstractType
                 'required' => true,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
-                    new NotBlank(['message' => 'Veuillez entrer un mot de passe.']),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
-                        'max' => 4096,
-                    ]),
+                    new NotBlank(message: 'Veuillez entrer un mot de passe.'),
+                    new Length(min: 6, minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères.', max: 4096),
                 ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
@@ -70,7 +66,7 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'required' => true,
                 'constraints' => [
-                    new IsTrue(['message' => 'Vous devez accepter les CGU.']),
+                    new IsTrue(message: 'Vous devez accepter les CGU.'),
                 ],
             ]);
     }
