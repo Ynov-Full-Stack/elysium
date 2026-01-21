@@ -48,6 +48,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_user_profile');
         }
 
+
         // password
         $changePassword = new ChangePassword();
         $passwordForm = $this->createForm(ChangePasswordType::class, $changePassword);
