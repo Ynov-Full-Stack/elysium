@@ -14,22 +14,5 @@ services:
     restart: always
     ports:
       - '29080:8080'
-  keycloak:
-    #image: jboss/keycloak:latest
-    image: mihaibob/keycloak:18.0.2-legacy
-    container_name: keycloak.dev.local
-    environment:
-      DB_VENDOR: POSTGRES
-      DB_ADDR: elysium-database-1
-      DB_DATABASE: keycloak
-      DB_USER: elysium
-      DB_SCHEMA: public
-      DB_PASSWORD: elysium
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: password
-    ports:
-      - "8080:8080"
-    depends_on:
-      - database
 volumes:
   database_data:
