@@ -39,6 +39,13 @@ services:
     ports:
       - "1025:1025"   # SMTP
       - "8025:8025"   # Web UI
+  # messenger:
+  #   build: .
+  #   command: php bin/console messenger:consume async -vv
+  #   volumes:
+  #     - .:/app
+  #   depends_on:
+  #     - database
 
 volumes:
   database_data:
