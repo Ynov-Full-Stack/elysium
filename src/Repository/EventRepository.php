@@ -9,6 +9,7 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @extends ServiceEntityRepository<Event>
@@ -36,7 +37,22 @@ class EventRepository extends ServiceEntityRepository
             $qb->andWhere('e.name LIKE :search')->setParameter('search', "%$search%");
         }
         if ($types = $request->query->all('types')) {
-            $qb->andWhere('e.type IN (:types)')->setParameter('types', $types);
+            $typeValues = [];
+            $cases = EventType::cases();
+
+            foreach ($types as $typeName) {
+                foreach ($cases as $case) {
+                    if ($case->name === $typeName) {
+                        $typeValues[] = $case->value;
+                        break;
+                    }
+                }
+            }
+
+            if (!empty($typeValues)) {
+                $qb->andWhere('e.type IN (:types)')
+                    ->setParameter('types', $typeValues);
+            }
         }
         $maxPrice = $request->query->get('max_price');
         if ($maxPrice !== null) {
@@ -75,7 +91,7 @@ class EventRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult(AbstractQuery::HYDRATE_SCALAR_COLUMN);
     }
 
-    public function findDistinctTypes(): array
+    public function findDistinctTypes(TranslatorInterface $translator): array
     {
         $qb = $this->createQueryBuilder('e');
         $qb->select('DISTINCT e.type')
@@ -85,11 +101,15 @@ class EventRepository extends ServiceEntityRepository
         $intValues = $qb->getQuery()->getResult(AbstractQuery::HYDRATE_SCALAR_COLUMN);
 
         $cases = EventType::cases();
-        $names = [];
+        $translatedNames = [];
+
         foreach ($intValues as $intVal) {
-            $names[] = $cases[$intVal]->name;
+            if (isset($cases[$intVal])) {
+                $translatedNames[] = $cases[$intVal]->trans($translator);
+            }
         }
-        return array_unique($names);
+
+        return array_unique($translatedNames);
     }
 
 
