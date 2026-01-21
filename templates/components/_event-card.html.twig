@@ -27,6 +27,10 @@
                 <span class="empty-button-gold text-sm">
             Participer
         </span>
+            {% elseif event.registrationEndAt and event.registrationEndAt < 'now'|date() %}
+                <span class="text-red-600 font-semibold text-sm">
+            Réservation fermé
+        </span>
             {% else %}
                 <span class="text-red-600 font-semibold text-sm">
             Complet
