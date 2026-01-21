@@ -220,7 +220,7 @@
                             </div>
                         </div>
 
-                        {% if event.remainingSeats > 0 and event.eventDate > date() %}
+                        {% if event.remainingSeats > 0 and event.registrationEndAt > date() %}
                             <form method="post" action="#" class="space-y-4">
                                 <div>
                                     <label class="block text-sm font-semibold text-[#163260] mb-2">
@@ -246,7 +246,7 @@
                             </div>
                         {% else %}
                             <div class="bg-gray-50 border border-gray-200 text-gray-700 px-4 py-3 rounded-xl text-center">
-                                <p class="font-semibold">Événement passé</p>
+                                <p class="font-semibold">Réservation cloturé</p>
                             </div>
                         {% endif %}
 
