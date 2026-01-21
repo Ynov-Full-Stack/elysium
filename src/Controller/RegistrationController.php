@@ -28,10 +28,11 @@ class RegistrationController extends AbstractController
             $user->setRoles(['ROLE_USER']);
             $entityManager->persist($user);
             $entityManager->flush();
-
-            $this->addFlash('success', 'Inscription réussie ! Bienvenue.');
+            $this->addFlash('success', 'Votre inscription est un succès.');
 
             return $this->redirectToRoute('app_login');
+        }elseif ($form->isSubmitted() && !$form->isValid()) {
+            $this->addFlash('error', 'Le formulaire est invalide, veuillez remplir correctement tous les champs.');
         }
 
         return $this->render('/pages/registration/index.html.twig', [
