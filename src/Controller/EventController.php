@@ -9,18 +9,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/event')]
 final class EventController extends AbstractController
 {
     #[Route('/', name: 'app_event_index')]
-    public function index(EventRepository $eventRepository, Request $request): Response
+    public function index(EventRepository $eventRepository, Request $request, TranslatorInterface $translator): Response
     {
         $page = max(1, $request->query->getInt('page', 1));
         $limit = 12;
         $data = $eventRepository->findFilteredPaginated($request, $page, $limit);
         $cities = $eventRepository->findDistinctCities();
-        $types = $eventRepository->findDistinctTypes();
+        $types = $eventRepository->findDistinctTypes($translator);
 
         // TODO : filter type doesn't work
 
