@@ -28,14 +28,24 @@ final class EventController extends AbstractController
     #[ParamDecryptor(['id'])]
     public function show(EventRepository $eventRepository, $id, Request $request): Response
     {
-        $event = $eventRepository->find(['id' => $id]);
+        $event = $eventRepository->findOneBy(['id' => $id]);
 
         if (!$event) {
             throw $this->createNotFoundException('Événement non trouvé');
         }
 
+        // remaining seat
+        $reservedSeats = 0;
+        foreach ($event->getReservations() as $reservation) {
+            $reservedSeats += $reservation->getSeatQuantity();
+        }
+
+        $remainingSeat = $event->getTotalSeats() - $reservedSeats;
+
+
         return $this->render('pages/event/show.html.twig', [
             'event' => $event,
+            'remainingSeats' => $remainingSeat,
             'previousUrl' => $request->headers->get('referer'),
         ]);
     }
