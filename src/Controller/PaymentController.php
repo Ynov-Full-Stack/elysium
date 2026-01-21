@@ -102,6 +102,7 @@ class PaymentController extends AbstractController
                 $reservation->setEvent($event);
                 $reservation->setUser($user);
                 $reservation->setSeatQuantity($quantity);
+                $reservation->setStatus('en cours');
                 $reservation->setStripeSessionId($session->id);
 
                 $entityManager->persist($reservation);

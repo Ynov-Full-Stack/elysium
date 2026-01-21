@@ -51,6 +51,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             $regEnd = $faker->dateTimeBetween($regStart, (clone $eventDate)->modify('-3 days'));
 
             $event = new Event();
+            $event->setStatus($faker->randomElement(['en cours', 'annulé']));
             $event->setName($faker->sentence(3));
             $event->setDescription($faker->paragraph(3));
             $event->setCreatedAt(new \DateTimeImmutable());
