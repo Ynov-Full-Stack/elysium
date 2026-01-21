@@ -221,13 +221,15 @@
                         </div>
 
                         {% if event.remainingSeats > 0 and event.eventDate > date() %}
-                            <form method="post" action="#" class="space-y-4">
+                            <form method="post"
+                                  action="{{ path('stripe_checkout', {id: event.id}) }}"
+                                  class="space-y-4">
                                 <div>
                                     <label class="block text-sm font-semibold text-[#163260] mb-2">
                                         Nombre de places
                                     </label>
                                     <input type="number"
-                                           name="nombre_places"
+                                           name="quantity"
                                            min="1"
                                            max="{{ event.remainingSeats }}"
                                            value="1"
@@ -235,6 +237,7 @@
                                 </div>
 
                                 <button type="submit"
+                                        data-turbo="false"
                                         class="w-full bg-gradient-to-r from-[#163260] to-[#1e4178] hover:from-[#1e4178] hover:to-[#163260] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                                     Réserver maintenant
                                 </button>
