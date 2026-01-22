@@ -1,21 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ event.nom }} - Elysium{% endblock %}
+{% block title %}{{ event.name }} - Elysium{% endblock %}
 
 {% block body %}
+
     <section class="py-16 bg-gradient-to-b from-[#FDFAF5]/50 to-[#FDFAF5]">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-4">
+                <a href="{{ previousUrl ?? path('app_event_index') }}" class="flex gap-2 align-center text-[#163260] font-semibold">
+                    {% include'icons/arrow-left-short.svg' %} Retour
+                </a>
+            </div>
             <div class="relative h-96 lg:h-[500px] rounded-3xl overflow-hidden mb-12 shadow-2xl">
                 <img src="https://picsum.photos/1200/600?random={{ event.id }}"
-                     alt="{{ event.nom }}"
+                     alt="{{ event.name }}"
                      class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#163260]/70 via-transparent to-transparent"></div>
                 <div class="absolute bottom-8 left-8 right-8">
                 <span class="inline-block bg-[#C29757]/90 text-[#163260] px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                    {{ event.type|title }}
+                    {{ event.type |trans }}
                 </span>
                     <h1 class="text-4xl lg:text-5xl font-black text-[#FDFAF5] leading-tight drop-shadow-2xl">
-                        {{ event.nom }}
+                        {{ event.name }}
                     </h1>
                 </div>
             </div>
@@ -28,25 +34,25 @@
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM5 8V6h14v2H5z"/>
                                 </svg>
-                                <span class="font-medium">{{ event.date|date('j F Y') }}</span>
+                                <span class="font-medium">{{ event.eventDate|date('j F Y') }}</span>
                             </div>
                             <div class="flex items-center gap-2 bg-[#163260]/10 text-[#163260] px-4 py-2 rounded-xl">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                                 </svg>
-                                <span class="font-medium">{{ event.lieu }}</span>
+                                <span class="font-medium">{{ event.city }}</span>
                             </div>
                             <div class="flex items-center gap-2 bg-[#C29757]/10 text-[#C29757] px-4 py-2 rounded-xl">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
                                 </svg>
-                                <span class="font-medium">{{ event.heureDebut|date('H:i') }}</span>
+                                <span class="font-medium">{{ event.registrationStartAt|date('H:i') }}</span>
                             </div>
                             <div class="flex items-center gap-2 bg-[#163260]/10 text-[#163260] px-4 py-2 rounded-xl">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
                                 </svg>
-                                <span class="font-medium">{{ event.capacite }} places</span>
+                                <span class="font-medium">{{ event.totalSeats }} places</span>
                             </div>
                         </div>
 
@@ -57,18 +63,131 @@
                             </p>
                         </div>
                     </div>
+                    <!-- Detail -->
+                    <!-- Detail -->
+                    <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-[#163260]/10">
+                        <h2 class="text-2xl font-bold text-[#163260] mb-6">Détail de l'événement</h2>
 
-                    {% if event.organisateur is defined %}
+                        <div class="space-y-6">
+                            <!-- Dates et horaires -->
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-[#FDFAF5] rounded-xl p-4 border border-[#C29757]/20">
+                                    <h3 class="text-sm font-semibold text-[#163260] mb-2 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-[#C29757]" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM5 8V6h14v2H5z"/>
+                                        </svg>
+                                        Date de l'événement
+                                    </h3>
+                                    <p class="text-[#163260] font-medium">{{ event.eventDate|date('l j F Y') }}</p>
+                                    <p class="text-sm text-gray-600">À {{ event.eventDate|date('H:i') }}</p>
+                                </div>
+
+                                <div class="bg-[#FDFAF5] rounded-xl p-4 border border-[#C29757]/20">
+                                    <h3 class="text-sm font-semibold text-[#163260] mb-2 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-[#C29757]" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                                        </svg>
+                                        Heure d'ouverture
+                                    </h3>
+                                    <p class="text-[#163260] font-medium">{{ event.registrationStartAt|date('H:i') }}</p>
+                                    <p class="text-sm text-gray-600">Ouverture des portes</p>
+                                </div>
+                            </div>
+
+                            <!-- Période d'inscription -->
+                            {% if event.registrationStartAt or event.registrationEndAt %}
+                                <div class="bg-[#FDFAF5] rounded-xl p-4 border border-[#C29757]/20">
+                                    <h3 class="text-sm font-semibold text-[#163260] mb-3 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-[#C29757]" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                                        </svg>
+                                        Période d'inscription
+                                    </h3>
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        {% if event.registrationStartAt %}
+                                            <div>
+                                                <p class="text-xs text-gray-600 mb-1">Début des inscriptions</p>
+                                                <p class="text-[#163260] font-medium">{{ event.registrationStartAt|date('d/m/Y à H:i') }}</p>
+                                            </div>
+                                        {% endif %}
+                                        {% if event.registrationEndAt %}
+                                            <div>
+                                                <p class="text-xs text-gray-600 mb-1">Fin des inscriptions</p>
+                                                <p class="text-[#163260] font-medium">{{ event.registrationEndAt|date('d/m/Y à H:i') }}</p>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <!-- Lieu complet -->
+                            <div class="bg-[#FDFAF5] rounded-xl p-4 border border-[#C29757]/20">
+                                <h3 class="text-sm font-semibold text-[#163260] mb-3 flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-[#C29757]" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                    </svg>
+                                    Lieu de l'événement
+                                </h3>
+                                {% if event.venueName %}
+                                    <p class="text-[#163260] font-semibold text-lg mb-2">{{ event.venueName }}</p>
+                                {% endif %}
+                                <div class="text-gray-700 space-y-1">
+                                    {% if event.streetNumber or event.street %}
+                                        <p>{{ event.streetNumber }} {{ event.street }}</p>
+                                    {% endif %}
+                                    {% if event.postalCode or event.city %}
+                                        <p>{{ event.postalCode }} {{ event.city }}</p>
+                                    {% endif %}
+                                    {% if event.country %}
+                                        <p class="font-medium">{{ event.country }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Capacité et tarif -->
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-[#FDFAF5] rounded-xl p-4 border border-[#C29757]/20">
+                                    <h3 class="text-sm font-semibold text-[#163260] mb-2 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-[#C29757]" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                                        </svg>
+                                        Capacité totale
+                                    </h3>
+                                    <p class="text-2xl font-bold text-[#163260]">{{ event.totalSeats }}</p>
+                                    <p class="text-sm text-gray-600">places disponibles</p>
+                                </div>
+
+                                <div class="bg-[#FDFAF5] rounded-xl p-4 border border-[#C29757]/20">
+                                    <h3 class="text-sm font-semibold text-[#163260] mb-2 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-[#C29757]" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
+                                        </svg>
+                                        Tarif
+                                    </h3>
+                                    <p class="text-2xl font-bold text-[#163260]">
+                                        {% if event.price == 0 %}
+                                            Gratuit
+                                        {% else %}
+                                            {{ event.price }}€
+                                        {% endif %}
+                                    </p>
+                                    <p class="text-sm text-gray-600">par personne</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if event.organizer is defined %}
                         <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-[#163260]/10">
                             <h3 class="text-xl font-bold text-[#163260] mb-4">Organisé par</h3>
                             <div class="flex items-center gap-4">
                                 <div class="w-12 h-12 bg-[#C29757] rounded-full flex items-center justify-center text-white font-bold text-lg">
-                                    {{ event.organisateur.nom|first|upper }}
+                                    {{ event.organizer.firstname|first|upper }}{{ event.organizer.lastname|first|upper }}
                                 </div>
                                 <div>
-                                    <p class="font-semibold text-[#163260]">{{ event.organisateur.nom }}</p>
-                                    {% if event.organisateur.email is defined %}
-                                        <p class="text-sm text-gray-600">{{ event.organisateur.email }}</p>
+                                    <p class="font-semibold text-[#163260]">{{ event.organizer.firstname }} {{ event.organizer.lastname }}</p>
+                                    {% if event.organizer.email is defined %}
+                                        <p class="text-sm text-gray-600">{{ event.organizer.email }}</p>
                                     {% endif %}
                                 </div>
                             </div>
@@ -77,58 +196,72 @@
                 </div>
 
                 <div class="lg:col-span-1">
-                    <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-[#163260]/10 sticky top-8">
+                    <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-[#163260]/10 sticky top-30">
                         <div class="text-center mb-6">
                             <p class="text-sm text-gray-600 mb-2">Tarif</p>
                             <p class="text-4xl font-black text-[#163260]">
-                                {% if event.prix == 0 %}
+                                {% if event.price == 0 %}
                                     Gratuit
                                 {% else %}
-                                    {{ event.prix }}€
+                                    {{ event.price }}€
                                 {% endif %}
                             </p>
                             <p class="text-sm text-gray-600 mt-1">par personne</p>
                         </div>
 
-                        {% set placesRestantes = event.capacite - event.reservations|length %}
                         <div class="mb-6">
                             <div class="flex justify-between text-sm mb-2">
                                 <span class="text-gray-600">Places disponibles</span>
-                                <span class="font-semibold text-[#163260]">{{ placesRestantes }} / {{ event.capacite }}</span>
+                                <span class="font-semibold text-[#163260]">{{ event.remainingSeats }} / {{ event.totalSeats }}</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
                                 <div class="bg-[#C29757] h-2 rounded-full transition-all"
-                                     style="width: {{ (placesRestantes / event.capacite * 100)|round }}%"></div>
+                                     style="width: {{ (event.remainingSeats / event.totalSeats * 100)|round }}%"></div>
                             </div>
                         </div>
-
-                        {% if placesRestantes > 0 and event.date > date() %}
-                            <form method="post" action="#" class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-semibold text-[#163260] mb-2">
-                                        Nombre de places
-                                    </label>
-                                    <input type="number"
-                                           name="nombre_places"
-                                           min="1"
-                                           max="{{ placesRestantes }}"
-                                           value="1"
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C29757] focus:border-transparent transition-all">
+                        {% if event.status == 'en cours' %}
+                            {% if event.remainingSeats > 0 and event.registrationEndAt > date('now') and event.registrationStartAt < date('now') %}
+                                <form method="post"
+                                      action="{{ path('stripe_checkout', {id: event.id}) }}"
+                                      class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-[#163260] mb-2">
+                                            Nombre de places
+                                        </label>
+                                        <input type="number"
+                                               name="quantity"
+                                               min="1"
+                                               max="{{ event.remainingSeats }}"
+                                               value="1"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C29757] focus:border-transparent transition-all">
+                                    </div>
+                                    <button type="submit"
+                                            data-turbo="false"
+                                            class="w-full bg-gradient-to-r from-[#163260] to-[#1e4178] hover:from-[#1e4178] hover:to-[#163260] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                                        Réserver maintenant
+                                    </button>
+                                </form>
+                            {% elseif event.remainingSeats == 0 %}
+                                <div
+                                    class="bg-gray-50 border border-gray-200 text-gray-700 px-4 py-3 rounded-xl text-center">
+                                    <p class="font-semibold">Complet</p>
+                                    <p class="text-sm">Plus de places disponibles</p>
                                 </div>
-
-                                <button type="submit"
-                                        class="w-full bg-gradient-to-r from-[#163260] to-[#1e4178] hover:from-[#1e4178] hover:to-[#163260] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                                    Réserver maintenant
-                                </button>
-                            </form>
-                        {% elseif placesRestantes == 0 %}
-                            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-center">
-                                <p class="font-semibold">Complet</p>
-                                <p class="text-sm">Plus de places disponibles</p>
-                            </div>
+                            {% elseif event.registrationEndAt < date('now') %}
+                                <div
+                                    class="bg-gray-50 border border-gray-200 text-gray-700 px-4 py-3 rounded-xl text-center">
+                                    <p class="font-semibold">Réservation cloturé</p>
+                                </div>
+                            {% elseif event.registrationStartAt > date('now') %}
+                                <div
+                                    class="bg-gray-50 border border-gray-200 text-gray-700 px-4 py-3 rounded-xl text-center">
+                                    <p class="font-semibold">Réservation bientôt disponible</p>
+                                </div>
+                            {% endif %}
                         {% else %}
-                            <div class="bg-gray-50 border border-gray-200 text-gray-700 px-4 py-3 rounded-xl text-center">
-                                <p class="font-semibold">Événement passé</p>
+                            <div
+                                class="bg-gray-50 border border-gray-200 text-gray-700 px-4 py-3 rounded-xl text-center">
+                                <p class="font-semibold">Réservation annulé</p>
                             </div>
                         {% endif %}
 

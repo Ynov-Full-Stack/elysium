@@ -9,9 +9,12 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Faker\Factory;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class EventFixtures extends Fixture implements DependentFixtureInterface
 {
+    public function __construct(private UserPasswordHasherInterface $passwordHasher) {}
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
@@ -35,7 +38,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 20; $i++) {
             $organizer = new User();
             $organizer->setEmail("org{$i}@events.fr");
-            $organizer->setPassword(password_hash('dummy', PASSWORD_DEFAULT));
+            $organizer->setPassword($this->passwordHasher->hashPassword($organizer, 'dummy'));
             $organizer->setRoles(['ROLE_USER']);
             $organizer->setLastname($faker->lastName);
             $organizer->setFirstname($faker->firstName);
@@ -46,11 +49,14 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
 
         for ($i = 0; $i < 20; $i++) {
-            $eventDate = $faker->dateTimeBetween('2026-03-01', '2026-12-31');
-            $regStart = $faker->dateTimeBetween('2026-01-25', (clone $eventDate)->modify('-1 month'));
-            $regEnd = $faker->dateTimeBetween($regStart, (clone $eventDate)->modify('-3 days'));
+            $eventDate = $faker->dateTimeBetween('2026-04-01', '2026-12-31');
+            $regStart = clone $eventDate;
+            $regStart->modify('-45 days');
+            $regEnd = clone $eventDate;
+            $regEnd->modify('-3 days');
 
             $event = new Event();
+            $event->setStatus($faker->randomElement(['en cours', 'annulé']));
             $event->setName($faker->sentence(3));
             $event->setDescription($faker->paragraph(3));
             $event->setCreatedAt(new \DateTimeImmutable());

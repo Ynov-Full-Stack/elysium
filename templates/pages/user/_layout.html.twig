@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="min-h-screen bg-gradient-to-br from-[#FDFAF5] via-white to-[#FDFAF5] py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-12 gap-8">
+                <!-- Sidebar -->
+                <aside class="lg:col-span-4 xl:col-span-3 bg-white/80 backdrop-blur-sm shadow-2xl rounded-3xl p-8 border border-[#C29757]/20 sticky top-30 h-fit">
+                    <div class="flex items-center gap-4 mb-10 pb-8 border-b border-[#C29757]/20">
+                        <div class="w-16 h-16 bg-gradient-to-br from-[#163260] to-[#1e4178] rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                            {{ app.user.firstname|first|upper }}{{ app.user.lastname|first|upper }}
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-black text-[#163260] leading-tight">{{ app.user.firstname }} {{ app.user.lastname }}</h3>
+                            <p class="text-[#163260]/60 font-medium text-sm">{{ app.user.email }}</p>
+                        </div>
+                    </div>
+
+                    <nav class="space-y-2">
+                        <a href="{{ path('app_user_index') }}"
+                           class="group flex items-center gap-4 p-4 rounded-2xl font-semibold transition-all duration-300
+                              {% if app.request.attributes.get('_route') == 'app_user_index' %}
+                                  bg-gradient-to-r from-[#C29757]/10 to-[#C29757]/20 text-[#163260] shadow-sm border border-[#C29757]/30
+                              {% else %}
+                                  text-[#163260] hover:bg-[#FDFAF5] hover:shadow-md
+                              {% endif %}">
+                            <svg class="w-6 h-6 {% if app.request.attributes.get('_route') == 'app_user_index' %}text-[#C29757]{% endif %} group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                            </svg>
+                            Vue d'ensemble
+                        </a>
+
+                        <a href="{{ path('app_user_profile') }}"
+                           class="flex items-center gap-4 p-4 rounded-2xl font-semibold transition-all duration-300
+                              {% if app.request.attributes.get('_route') == 'app_user_profile' %}
+                                  bg-gradient-to-r from-[#C29757]/10 to-[#C29757]/20 text-[#163260] shadow-sm border border-[#C29757]/30
+                              {% else %}
+                                  text-[#163260] hover:bg-[#FDFAF5] hover:shadow-md
+                              {% endif %}">
+                            <svg class="w-6 h-6 {% if app.request.attributes.get('_route') == 'app_user_profile' %}text-[#C29757]{% endif %}" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                            Profil
+                        </a>
+
+                        <a href="{{ path('app_user_reservations') }}"
+                           class="flex items-center gap-4 p-4 rounded-2xl font-semibold transition-all duration-300
+                              {% if app.request.attributes.get('_route') == 'app_user_reservations' %}
+                                  bg-gradient-to-r from-[#C29757]/10 to-[#C29757]/20 text-[#163260] shadow-sm border border-[#C29757]/30
+                              {% else %}
+                                  text-[#163260] hover:bg-[#FDFAF5] hover:shadow-md
+                              {% endif %}">
+                            <svg class="w-6 h-6 {% if app.request.attributes.get('_route') == 'app_user_reservations' %}text-[#C29757]{% endif %}" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/>
+                            </svg>
+                            Réservations
+                        </a>
+
+                        <a href="{{ path('app_user_preferences') }}"
+                           class="flex items-center gap-4 p-4 rounded-2xl font-semibold transition-all duration-300
+                              {% if app.request.attributes.get('_route') == 'app_user_preferences' %}
+                                  bg-gradient-to-r from-[#C29757]/10 to-[#C29757]/20 text-[#163260] shadow-sm border border-[#C29757]/30
+                              {% else %}
+                                  text-[#163260] hover:bg-[#FDFAF5] hover:shadow-md
+                              {% endif %}">
+                            <svg class="w-6 h-6 {% if app.request.attributes.get('_route') == 'app_user_preferences' %}text-[#C29757]{% endif %}" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94L14.4 2.81c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                            </svg>
+                            Préférences
+                        </a>
+
+                        <a href="{{ path('app_logout') }}"
+                           class="flex items-center gap-4 p-4 rounded-2xl text-red-600 font-semibold hover:bg-red-50 border border-red-200/50 hover:shadow-md transition-all duration-300 justify-center">
+                            {% include'icons/box-arrow-right.svg' %}
+                            Déconnexion
+                        </a>
+                    </nav>
+                </aside>
+
+                <!-- Contenu principal -->
+                <main class="lg:col-span-9">
+                    {% block user_content %}{% endblock %}
+                </main>
+            </div>
+        </div>
+    </div>
+{% endblock %}

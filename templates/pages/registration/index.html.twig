@@ -3,98 +3,114 @@
 {% block title %}Inscription | Elysium{% endblock %}
 
 {% block body %}
-    <div class="min-h-screen flex items-center justify-center px-4">
-        <div class="w-full max-w-md bg-white/90 rounded-2xl shadow-2xl p-8">
-
+    {% for message in app.flashes('success') %}
+        <div class="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-lg text-sm">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <div class="min-h-screen flex items-center justify-center px-4 bg-[#F5F1E8]">
+        <div class="w-full max-w-md bg-white/90 backdrop-blur rounded-2xl shadow-2xl p-8 border border-[#E0D4BF]">
             <h1 class="text-3xl text-center font-semibold text-[#0C325C] mb-2">
                 Rejoindre Elysium
             </h1>
-            <p class="text-center text-sm text-[#7A6B56] mb-6">
+            <p class="text-center text-sm text-[#7A6B56] mb-8">
                 Créez votre compte pour réserver l'exception
             </p>
 
-            {% for message in app.flashes('success') %}
-                <div class="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-lg text-sm">
+            {% for message in app.flashes('error') %}
+                <div
+                    class="mb-6 bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded-lg text-sm"
+                >
                     {{ message }}
                 </div>
             {% endfor %}
 
+
             {{ form_start(registrationForm, {
                 attr: {
-                    novalidate: 'novalidate',
-                    class: 'space-y-5'
+                    'data-controller': 'register',
+                    'data-action': 'input->register#toggle change->register#toggle'
                 }
             }) }}
 
-            {% for field in [
-                registrationForm.firstName,
-                registrationForm.lastName,
-                registrationForm.email,
-                registrationForm.birthdate,
-                registrationForm.plainPassword
-            ] %}
-                <div>
-                    {{ form_label(field, null, { label_attr: { class: 'block text-sm font-medium mb-1' } }) }}
-                    {{ form_widget(field, {
-                        attr: {
-                            class: 'w-full rounded-lg border px-4 py-2.5 focus:ring-2 focus:ring-[#C59A3A] ' ~
-                            (field.vars.errors|length ? 'border-red-500' : 'border-gray-300')
-                        }
-                    }) }}
-                    {{ form_errors(field) }}
-                </div>
-            {% endfor %}
+            {{ form_row(registrationForm.firstName, {
+                row_attr: { class: 'mb-6' },
+                label: 'Prénom',
+                label_attr: { class: 'block text-sm font-medium text-[#4B5563] mb-1' },
+                attr: {
+                    'data-register-target': 'input',
+                    class: 'w-full rounded-lg bg-white border border-[#D1D5DB] px-4 py-2.5 text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#C59A3A] focus:border-transparent transition'
+                }
+            }) }}
 
-            <div class="flex items-start gap-2 text-sm">
-                {{ form_widget(registrationForm.agreeTerms, { attr: { class: 'mt-1' } }) }}
-                {{ form_label(registrationForm.agreeTerms) }}
-            </div>
-            {{ form_errors(registrationForm.agreeTerms) }}
+            {{ form_row(registrationForm.lastName, {
+                row_attr: { class: 'mb-6' },
+                label: 'Nom',
+                label_attr: { class: 'block text-sm font-medium text-[#4B5563] mb-1' },
+                attr: {
+                    'data-register-target': 'input',
+                    class: 'w-full rounded-lg bg-white border border-[#D1D5DB] px-4 py-2.5 text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#C59A3A] focus:border-transparent transition'
+                }
+            }) }}
+
+            {{ form_row(registrationForm.email, {
+                row_attr: { class: 'mb-6' },
+                label: 'Email',
+                label_attr: { class: 'block text-sm font-medium text-[#4B5563] mb-1' },
+                attr: {
+                    'data-register-target': 'input',
+                    class: 'w-full rounded-lg bg-white border border-[#D1D5DB] px-4 py-2.5 text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#C59A3A] focus:border-transparent transition'
+                }
+            }) }}
+
+            {{ form_row(registrationForm.birthdate, {
+                row_attr: { class: 'mb-6' },
+                label: 'Date de naissance',
+                label_attr: { class: 'block text-sm font-medium text-[#4B5563] mb-1' },
+                widget: 'single_text',
+                attr: {
+                    'data-register-target': 'input',
+                    class: 'w-full rounded-lg bg-white border border-[#D1D5DB] px-4 py-2.5 text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#C59A3A] focus:border-transparent transition'
+                }
+            }) }}
+
+            {{ form_row(registrationForm.plainPassword, {
+                row_attr: { class: 'mb-6' },
+                label: 'Mot de passe',
+                label_attr: { class: 'block text-sm font-medium text-[#4B5563] mb-1' },
+                attr: {
+                    'data-register-target': 'input',
+                    class: 'w-full rounded-lg bg-white border border-[#D1D5DB] px-4 py-2.5 text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#C59A3A] focus:border-transparent transition'
+                }
+            }) }}
+
+            {{ form_row(registrationForm.agreeTerms, {
+                row_attr: { class: 'flex items-center gap-2 text-sm text-[#4B5563] mb-6' },
+                label: 'J’accepte les conditions générales',
+                label_attr: { class: 'text-sm text-[#4B5563]' },
+                attr: {
+                    'data-register-target': 'checkbox',
+                    class: 'h-4 w-4 rounded border-[#D1D5DB] text-[#0C325C] focus:ring-[#C59A3A]'
+                }
+            }) }}
 
             <button
                 id="submit-btn"
                 type="submit"
                 disabled
-                class="w-full mt-4 bg-[#0C325C] text-white py-3 rounded-lg flex items-center justify-center gap-2
-                   disabled:bg-gray-400 disabled:cursor-not-allowed"
+                data-register-target="submit"
+                class="w-full rounded-lg bg-[#0C325C] hover:bg-[#134072] text-white font-medium py-3 transition shadow-lg shadow-[#0C325C]/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
-                <span id="btn-text">S'inscrire</span>
-                <span id="spinner" class="hidden h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                <span id="spinner"
+                      class="hidden h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                <span class="ml-2">Créer mon compte</span>
             </button>
 
+            <div class="mt-8 text-center text-xs text-[#9CA3AF]">
+                © {{ "now"|date("Y") }} Elysium — Concerts & Spectacles
+            </div>
             {{ form_end(registrationForm) }}
+
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.querySelector('form');
-            const submitBtn = document.getElementById('submit-btn');
-            const spinner = document.getElementById('spinner');
-            const btnText = document.getElementById('btn-text');
-            const terms = document.querySelector('#{{ registrationForm.agreeTerms.vars.id }}');
-
-            function toggleButton() {
-                const requiredFilled = [...form.querySelectorAll('input[required]')]
-                    .every(input => input.value.trim() !== '');
-
-                submitBtn.disabled = !(requiredFilled && terms.checked);
-            }
-
-            form.addEventListener('input', toggleButton);
-            terms.addEventListener('change', toggleButton);
-
-            form.addEventListener('submit', e => {
-                if (submitBtn.disabled) {
-                    e.preventDefault();
-                    return;
-                }
-                submitBtn.disabled = true;
-                spinner.classList.remove('hidden');
-                btnText.textContent = 'Création du compte...';
-            });
-
-            toggleButton();
-        });
-    </script>
 {% endblock %}

@@ -59,16 +59,16 @@
             "config/routes/easyadmin.yaml"
         ]
     },
-    "knpuniversity/oauth2-client-bundle": {
-        "version": "2.20",
+    "nzo/url-encryptor-bundle": {
+        "version": "6.5",
         "recipe": {
             "repo": "github.com/symfony/recipes-contrib",
             "branch": "main",
-            "version": "1.20",
-            "ref": "1ff300d8c030f55c99219cc55050b97a695af3f6"
+            "version": "6.0",
+            "ref": "42101a4fa1a537375c079e952e75338d017d6dae"
         },
         "files": [
-            "config/packages/knpu_oauth2_client.yaml"
+            "config/packages/nzo_encryptor.yaml"
         ]
     },
     "phpunit/phpunit": {
@@ -84,6 +84,18 @@
             "phpunit.dist.xml",
             "tests/bootstrap.php",
             "bin/phpunit"
+        ]
+    },
+    "stripe/stripe-php": {
+        "version": "19.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "19.0",
+            "ref": "d6829c693e3927a8972c7671d74a1a5c505712b0"
+        },
+        "files": [
+            "config/packages/stripe.yaml"
         ]
     },
     "symfony/asset-mapper": {

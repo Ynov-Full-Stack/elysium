@@ -1,0 +1,138 @@
+{# templates/dashboard/reservations.html.twig #}
+{% extends 'pages/user/_layout.html.twig' %}
+
+{% block title %}Mes Réservations - Elysium{% endblock %}
+
+{% block user_content %}
+    <div class="space-y-8">
+        <header>
+            <h1 class="text-4xl lg:text-5xl font-black bg-gradient-to-r from-[#163260] to-[#1e4178] bg-clip-text text-transparent mb-2">
+                Mes réservations
+            </h1>
+            <p class="text-[#163260]/60 text-lg">Consultez et gérez toutes vos réservations</p>
+        </header>
+
+        {% if app.flashes('success') %}
+            <div class="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-lg text-sm">
+                {% for message in app.flashes('success') %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <!-- Filtres -->
+        <div class="flex gap-4 flex-wrap">
+            <a href="?filter=all"
+               class="px-6 py-3 rounded-xl font-semibold transition-all {% if app.request.get('filter', 'all') == 'all' %}bg-[#C29757] text-white{% else %}bg-white/70 text-[#163260] hover:bg-[#FDFAF5]{% endif %}">
+                Toutes
+            </a>
+            <a href="?filter=upcoming"
+               class="px-6 py-3 rounded-xl font-semibold transition-all {% if app.request.get('filter') == 'upcoming' %}bg-[#C29757] text-white{% else %}bg-white/70 text-[#163260] hover:bg-[#FDFAF5]{% endif %}">
+                À venir
+            </a>
+            <a href="?filter=past"
+               class="px-6 py-3 rounded-xl font-semibold transition-all {% if app.request.get('filter') == 'past' %}bg-[#C29757] text-white{% else %}bg-white/70 text-[#163260] hover:bg-[#FDFAF5]{% endif %}">
+                Passées
+            </a>
+        </div>
+
+        <!-- Liste des réservations -->
+        <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-[#C29757]/20">
+            <div class="space-y-6">
+                <!-- En-tête du tableau (desktop) -->
+                <div
+                    class="hidden md:grid md:grid-cols-7 gap-4 pb-4 border-b border-[#C29757]/20 text-sm font-semibold text-[#163260]/60">
+                    <div class="col-span-2">Événement</div>
+                    <div>Date</div>
+                    <div>Lieu</div>
+                    <div>Places</div>
+                    <div>Statut</div>
+                    <div>Action</div>
+                </div>
+
+                <!-- Lignes de réservations -->
+                {% for reservation in reservations %}
+                    <div
+                        class="grid md:grid-cols-7 gap-4 items-center p-4 bg-[#FDFAF5] rounded-xl hover:shadow-md transition-all">
+                        <div class="col-span-2">
+                            <div class="flex items-center gap-4">
+                                <div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 hidden sm:block">
+                                    <img src="https://picsum.photos/200/200"
+                                         alt=""
+                                         class="w-full h-full object-cover">
+                                </div>
+                                <div>
+                            <span
+                                class="inline-block text-xs font-semibold text-[#C29757] bg-[#C29757]/10 px-2 py-1 rounded-full mb-1">
+                                {{ reservation.event.type | trans }}
+                            </span>
+                                    <p class="font-bold text-[#163260]">{{ reservation.event.name }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-sm text-[#163260]/60">
+                            <span class="md:hidden font-semibold">Date: </span>
+                            {{ reservation.event.eventDate|date('d/m/Y') }}
+                        </div>
+                        <div class="text-sm text-[#163260]/60">
+                            <span class="md:hidden font-semibold">Lieu: </span>
+                            {{ reservation.event.streetNumber }} {{ reservation.event.street }} {{ reservation.event.city }}
+                        </div>
+                        <div class="text-sm font-semibold text-[#163260]">
+                            <span class="md:hidden">Places: </span>
+                            {{ reservation.seatQuantity }}
+                        </div>
+                        <div>
+                            {% if reservation.status == "en cours" %}
+                                <span
+                                    class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
+                            En cours
+                        </span>
+                            {% else %}
+                                <span
+                                    class="inline-block px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-semibold">
+                            Annulée
+                        </span>
+                            {% endif %}
+                        </div>
+                        <form method="post"
+                              action="{{ path('app_reservation_cancel', { id: reservation.id }) }}"
+                              onsubmit="return confirm('Êtes-vous certain de vouloir annuler votre réservation ?')">
+
+                            {% if reservation.status == "annulée" %}
+                                <span
+                                    class="inline-block px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-semibold">
+                                    Déjà annulée
+                                </span>
+                            {% else %}
+                                <button type="submit"
+                                        class="text-red-600 font-semibold hover:underline">
+                                    Annuler
+                                </button>
+                            {% endif %}
+                        </form>
+                    </div>
+
+                {% else %}
+                    <p class="text-center text-[#163260]/60 py-12">Aucune réservation trouvée</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        {% if pagination.totalPages > 1 %}
+            <div class="flex justify-center gap-2">
+                {% for page in 1..pagination.totalPages %}
+                    <a href="?page={{ page }}"
+                       class="w-10 h-10 flex items-center justify-center rounded-xl font-semibold transition-all
+                  {% if page == pagination.currentPage %}
+                      bg-[#C29757] text-white
+                  {% else %}
+                      bg-white/70 text-[#163260] hover:bg-[#FDFAF5]
+                  {% endif %}">
+                        {{ page }}
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
