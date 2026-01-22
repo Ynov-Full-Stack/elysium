@@ -101,15 +101,16 @@ class EventRepository extends ServiceEntityRepository
         $intValues = $qb->getQuery()->getResult(AbstractQuery::HYDRATE_SCALAR_COLUMN);
 
         $cases = EventType::cases();
-        $translatedNames = [];
+        $typesMap = [];
 
         foreach ($intValues as $intVal) {
             if (isset($cases[$intVal])) {
-                $translatedNames[] = $cases[$intVal]->trans($translator);
+                $enumCase = $cases[$intVal];
+                $typesMap[$enumCase->name] = $enumCase->trans($translator);
             }
         }
 
-        return array_unique($translatedNames);
+        return $typesMap;
     }
 
 
