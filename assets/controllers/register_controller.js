@@ -15,6 +15,5 @@ export default class extends Controller {
         const checkboxChecked = this.checkboxTarget.checked;
 
         this.submitTarget.disabled = !(inputsFilled && checkboxChecked);
-        console.log("test")
     }
 }
