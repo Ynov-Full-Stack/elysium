@@ -57,9 +57,9 @@
             {% if event.status == 'en cours' %}
                 {% if event.remainingSeats > 0 and event.registrationEndAt > date('now') and event.registrationStartAt < date('now') %}
                     <span class="empty-button-gold text-sm">Participer</span>
-                {% elseif event.registrationEndAt and event.registrationEndAt < date('now') %}
+                {% elseif event.registrationEndAt < date('now') %}
                     <span class="text-red-600 font-semibold text-sm">Réservation cloturé</span>
-                {% elseif event.registrationStartAt and event.registrationStartAt > date('now') %}
+                {% elseif event.registrationStartAt > date('now') %}
                     <span class="text-red-600 font-semibold text-sm">Prochainement</span>
                 {% endif %}
             {% else %}
