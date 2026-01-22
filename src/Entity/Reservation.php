@@ -29,6 +29,9 @@ class Reservation
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\Column(type: 'json')]
+    private array $sentReminderOffsets = [];
+
     #[ORM\PrePersist]
     public function prePersist(): void
     {
@@ -87,5 +90,22 @@ class Reservation
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    public function getSentReminderOffsets(): array
+    {
+        return $this->sentReminderOffsets;
+    }
+
+    public function hasReminderBeenSent(string $offset): bool
+    {
+        return in_array($offset, $this->sentReminderOffsets, true);
+    }
+
+    public function addSentReminderOffset(string $offset): void
+    {
+        if (!$this->hasReminderBeenSent($offset)) {
+            $this->sentReminderOffsets[] = $offset;
+        }
     }
 }
