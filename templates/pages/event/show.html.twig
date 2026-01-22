@@ -196,7 +196,7 @@
                 </div>
 
                 <div class="lg:col-span-1">
-                    <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-[#163260]/10 sticky top-8">
+                    <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-[#163260]/10 sticky top-30">
                         <div class="text-center mb-6">
                             <p class="text-sm text-gray-600 mb-2">Tarif</p>
                             <p class="text-4xl font-black text-[#163260]">
@@ -219,37 +219,49 @@
                                      style="width: {{ (event.remainingSeats / event.totalSeats * 100)|round }}%"></div>
                             </div>
                         </div>
-
-                        {% if event.remainingSeats > 0 and event.eventDate > date() %}
-                            <form method="post"
-                                  action="{{ path('stripe_checkout', {id: event.id}) }}"
-                                  class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-semibold text-[#163260] mb-2">
-                                        Nombre de places
-                                    </label>
-                                    <input type="number"
-                                           name="quantity"
-                                           min="1"
-                                           max="{{ event.remainingSeats }}"
-                                           value="1"
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C29757] focus:border-transparent transition-all">
+                        {% if event.status == 'en cours' %}
+                            {% if event.remainingSeats > 0 and event.registrationEndAt > date('now') and event.registrationStartAt < date('now') %}
+                                <form method="post"
+                                      action="{{ path('stripe_checkout', {id: event.id}) }}"
+                                      class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-[#163260] mb-2">
+                                            Nombre de places
+                                        </label>
+                                        <input type="number"
+                                               name="quantity"
+                                               min="1"
+                                               max="{{ event.remainingSeats }}"
+                                               value="1"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C29757] focus:border-transparent transition-all">
+                                    </div>
+                                    <button type="submit"
+                                            data-turbo="false"
+                                            class="w-full bg-gradient-to-r from-[#163260] to-[#1e4178] hover:from-[#1e4178] hover:to-[#163260] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                                        Réserver maintenant
+                                    </button>
+                                </form>
+                            {% elseif event.remainingSeats == 0 %}
+                                <div
+                                    class="bg-gray-50 border border-gray-200 text-gray-700 px-4 py-3 rounded-xl text-center">
+                                    <p class="font-semibold">Complet</p>
+                                    <p class="text-sm">Plus de places disponibles</p>
                                 </div>
-
-                                <button type="submit"
-                                        data-turbo="false"
-                                        class="w-full bg-gradient-to-r from-[#163260] to-[#1e4178] hover:from-[#1e4178] hover:to-[#163260] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                                    Réserver maintenant
-                                </button>
-                            </form>
-                        {% elseif event.remainingSeats == 0 %}
-                            <div class="bg-gray-50 border border-gray-200 text-gray-700 px-4 py-3 rounded-xl text-center">
-                                <p class="font-semibold">Complet</p>
-                                <p class="text-sm">Plus de places disponibles</p>
-                            </div>
+                            {% elseif event.registrationEndAt < date('now') %}
+                                <div
+                                    class="bg-gray-50 border border-gray-200 text-gray-700 px-4 py-3 rounded-xl text-center">
+                                    <p class="font-semibold">Réservation cloturé</p>
+                                </div>
+                            {% elseif event.registrationStartAt > date('now') %}
+                                <div
+                                    class="bg-gray-50 border border-gray-200 text-gray-700 px-4 py-3 rounded-xl text-center">
+                                    <p class="font-semibold">Réservation bientôt disponible</p>
+                                </div>
+                            {% endif %}
                         {% else %}
-                            <div class="bg-gray-50 border border-gray-200 text-gray-700 px-4 py-3 rounded-xl text-center">
-                                <p class="font-semibold">Événement passé</p>
+                            <div
+                                class="bg-gray-50 border border-gray-200 text-gray-700 px-4 py-3 rounded-xl text-center">
+                                <p class="font-semibold">Réservation annulé</p>
                             </div>
                         {% endif %}
 

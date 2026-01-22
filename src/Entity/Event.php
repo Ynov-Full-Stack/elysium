@@ -31,10 +31,10 @@ class Event
     #[ORM\Column]
     private ?\DateTimeImmutable $eventDate = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column]
     private ?\DateTimeImmutable $registrationStartAt = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column]
     private ?\DateTimeImmutable $registrationEndAt = null;
 
     #[ORM\Column]
@@ -50,7 +50,7 @@ class Event
     /**
      * @var Collection<int, Reservation>
      */
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'event')]
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'event', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $reservations;
 
     #[ORM\Column(enumType: EventType::class)]
@@ -77,6 +77,13 @@ class Event
     #[ORM\Column(length: 20)]
     private ?string $status = 'en cours';
 
+    #[ORM\PrePersist]
+    public function prePersist(): void
+    {
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTimeImmutable();
+        }
+    }
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -140,7 +147,7 @@ class Event
         return $this->registrationStartAt;
     }
 
-    public function setRegistrationStartAt(?\DateTimeImmutable $registrationStartAt): static
+    public function setRegistrationStartAt(\DateTimeImmutable $registrationStartAt): static
     {
         $this->registrationStartAt = $registrationStartAt;
 
@@ -152,7 +159,7 @@ class Event
         return $this->registrationEndAt;
     }
 
-    public function setRegistrationEndAt(?\DateTimeImmutable $registrationEndAt): static
+    public function setRegistrationEndAt(\DateTimeImmutable $registrationEndAt): static
     {
         $this->registrationEndAt = $registrationEndAt;
 
