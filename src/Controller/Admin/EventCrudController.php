@@ -42,8 +42,8 @@ class EventCrudController extends AbstractCrudController
         );
 
         $statusChoices = [
-            'En cours' => 'ongoing',
-            'Annulé' => 'cancelled',
+            'En cours' => 'en cours',
+            'Annulé' => 'annulé',
         ];
 
         return [
