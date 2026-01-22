@@ -45,7 +45,7 @@ class AdminIncidentCommand extends Command
         $currentOrganizer->setLastname("Le Lastunamu");
         $currentOrganizer->setPassword("hmmm");
         $currentOrganizer->setRoles([ "ROLE_USER" ]);
-        $currentOrganizer->setEmail('sokomiano@gmail.com');
+        $currentOrganizer->setEmail('thomiaskenzo01@gmail.com');
         $currentOrganizer->setBirthdate(new \DateTime()->setDate(2002,3,13));
 
 
@@ -74,7 +74,18 @@ class AdminIncidentCommand extends Command
         $currentReservation->setSeatQuantity(2);
         $currentReservation->setUser($currentUser);
         
-        $this->mailService->send(MailMessage::adminIncident($currentUser, "Warning", "An oopsi as occurred"));
+        // $this->mailService->send(MailMessage::adminIncident($currentUser, "Warning", "An oopsi as occurred"));
+
+        $messages = $this->mailService->buildMessages(
+            users: [$currentUser, $currentOrganizer],
+            factory: [MailMessage::class, 'adminIncident'],
+            args: [
+                'Warning',
+                'An oopsie has occurred',
+            ]
+        );
+
+        $this->mailService->sendToMany($messages);
 
         $output->writeln('<info>Email dispatched successfully</info>');
 

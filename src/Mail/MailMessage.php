@@ -24,6 +24,7 @@ final class MailMessage {
         public readonly Context $context,
     ) {}
     
+    // FOR ANY NEW BUILDER ALWAYS HAVE THE DESTINATION USER BE THE FIRST ARGUMENT.
     public static function reservationCreation(User $user, Reservation $reservation): self {
         return new self(
             to: $user->getEmail(),
@@ -64,7 +65,6 @@ final class MailMessage {
             context: ContextFactory::accountDeletion($user)
         );
     }
-
     public static function adminReservationCreation(User $user, Reservation $reservation): self {
         return new self(
             to: $user->getEmail(),
