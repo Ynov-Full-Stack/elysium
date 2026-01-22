@@ -29,6 +29,8 @@ class Reservation
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\Column(type: 'json')]
+    private array $sentReminderOffsets = [];
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $stripeSessionId = null;
 
@@ -95,6 +97,21 @@ class Reservation
         return $this;
     }
 
+    public function getSentReminderOffsets(): array
+    {
+        return $this->sentReminderOffsets;
+    }
+
+    public function hasReminderBeenSent(string $offset): bool
+    {
+        return in_array($offset, $this->sentReminderOffsets, true);
+    }
+
+    public function addSentReminderOffset(string $offset): void
+    {
+        if (!$this->hasReminderBeenSent($offset)) {
+            $this->sentReminderOffsets[] = $offset;
+        }
     public function getStripeSessionId(): ?string
     {
         return $this->stripeSessionId;

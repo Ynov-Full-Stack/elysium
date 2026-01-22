@@ -9,10 +9,60 @@ services:
       - "5432:5432"
     volumes:
       - database_data:/var/lib/postgresql/data:rw
+
   adminer:
     image: adminer
     restart: always
     ports:
       - '29080:8080'
+
+  keycloak:
+    #image: jboss/keycloak:latest
+    image: mihaibob/keycloak:18.0.2-legacy
+    container_name: keycloak.dev.local
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: elysium-database-1
+      DB_DATABASE: keycloak
+      DB_USER: elysium
+      DB_SCHEMA: public
+      DB_PASSWORD: elysium
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: password
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+
+  mailer:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # Web UI
+
+  messenger:
+    build: .
+    container_name: elysium_messenger
+    command: php bin/console messenger:consume async -vv
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - database
+
+  reminder:
+    build: .
+    container_name: elysium_reminder
+    command: sh -c "while true; do php bin/console app:mail:reservation-reminders; sleep 300; done"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: "postgresql://elysium:elysium@database:5432/elysium?serverVersion=16&charset=utf8"
+
 volumes:
   database_data:

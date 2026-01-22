@@ -1,0 +1,51 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block title %}
+Reservation Updated
+{% endblock %}
+
+{% block content %}
+    <p>Hello {{ ctx.user.firstname }},</p>
+
+    <p>
+        Your reservation on <strong>Elysium</strong> has been <strong>successfully updated</strong>.
+    </p>
+
+    <div style="margin: 30px 0; padding: 15px; background-color: #f9f9f9; border-left: 4px solid #b91c1c;">
+        <p style="margin: 0 0 8px 0;">
+            <strong>Event:</strong> {{ ctx.reservation.event.name }}
+        </p>
+
+        {% if ctx.reservation.event.eventDate %}
+            <p style="margin: 0 0 8px 0;">
+                <strong>Date:</strong>
+                {{ ctx.reservation.event.eventDate|date('F j, Y \\a\\t H:i') }}
+            </p>
+        {% endif %}
+
+        <p style="margin: 0 0 8px 0;">
+            <strong>Seats reserved:</strong> {{ ctx.reservation.seatQuantity }}
+        </p>
+
+        {% if ctx.reservation.event.price is not null %}
+            <p style="margin: 0;">
+                <strong>Price:</strong> {{ ctx.reservation.event.price }} €
+            </p>
+        {% endif %}
+    </div>
+
+    <p>
+        This update was made on
+        {{ ctx.reservation.createdAt|date('F j, Y \\a\\t H:i') }}.
+    </p>
+
+    <p>
+        If you did not request this change or notice any incorrect information,
+        please contact our support team as soon as possible.
+    </p>
+
+    <p style="margin-top: 40px;">
+        Kind regards,<br>
+        <strong>The Elysium Team</strong>
+    </p>
+{% endblock %}

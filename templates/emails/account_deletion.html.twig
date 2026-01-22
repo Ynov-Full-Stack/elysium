@@ -1,0 +1,23 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block title %}
+Account Deleted
+{% endblock %}
+
+{% block content %}
+    <p>Hello {{ ctx.user.firstname }},</p>
+
+    <p>This email confirms that your <strong>Elysium</strong> account has been successfully deleted.</p>
+
+    <p>All your personal data, reservations, and associated information have been permanently removed from our system.</p>
+
+    <div style="margin: 30px 0; padding: 15px; background-color: #f9f9f9; border-left: 4px solid #b91c1c;">
+        <p style="margin: 0;">
+            If you did <strong>not</strong> request this action, please contact our support team immediately.
+        </p>
+    </div>
+
+    <p>We’re sorry to see you go. If you ever decide to come back, you’ll always be welcome to create a new account.</p>
+
+    <p style="margin-top: 40px;">Kind regards,<br><strong>The Elysium Team</strong></p>
+{% endblock %}
