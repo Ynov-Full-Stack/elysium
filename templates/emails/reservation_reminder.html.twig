@@ -1,0 +1,70 @@
+{% extends 'emails/base.html.twig' %}
+
+{% set now = "now"|date("U") %}
+{% set eventTimestamp = ctx.reservation.event.eventDate|date("U") %}
+{% set secondsLeft = eventTimestamp - now %}
+
+{% set days = (secondsLeft / 86400)|round(0, 'floor') %}
+{% set hours = ((secondsLeft % 86400) / 3600)|round(0, 'floor') %}
+
+
+{% block title %}
+Reservation Reminder
+{% endblock %}
+
+{% block content %}
+    <p>Hello {{ ctx.user.firstname }},</p>
+
+    <p>
+        This is a friendly reminder that you have an upcoming reservation on
+        <strong>Elysium</strong>.
+    </p>
+
+    <div style="margin: 30px 0; padding: 15px; background-color: #f9f9f9; border-left: 4px solid #b91c1c;">
+        <p style="margin: 0 0 8px 0;">
+            <strong>Event:</strong> {{ ctx.reservation.event.name }}
+        </p>
+
+        {% if ctx.reservation.event.eventDate %}
+            <p style="margin: 0 0 8px 0;">
+                <strong>Date:</strong>
+                {{ ctx.reservation.event.eventDate|date('F j, Y \\a\\t H:i') }}
+            </p>
+        {% endif %}
+
+        <p>
+            <strong>Time left:</strong>
+            {% if days > 0 %}
+                {{ days }} day{{ days > 1 ? 's' : '' }}
+            {% endif %}
+            {% if hours > 0 %}
+                {{ hours }} hour{{ hours > 1 ? 's' : '' }}
+            {% endif %}
+        </p>
+
+        <p style="margin: 0 0 8px 0;">
+            <strong>Reserved seats:</strong> {{ ctx.reservation.seatQuantity }}
+        </p>
+
+        {% if ctx.reservation.event.price is not null %}
+            <p style="margin: 0;">
+                <strong>Price:</strong> {{ ctx.reservation.event.price }} €
+            </p>
+        {% endif %}
+    </div>
+
+    <p>
+        We’re looking forward to seeing you there!
+        Please make sure to arrive a little early to ensure a smooth experience.
+    </p>
+
+    <p>
+        If you need to update or cancel your reservation, you can do so directly
+        from your Elysium account.
+    </p>
+
+    <p style="margin-top: 40px;">
+        Kind regards,<br>
+        <strong>The Elysium Team</strong>
+    </p>
+{% endblock %}

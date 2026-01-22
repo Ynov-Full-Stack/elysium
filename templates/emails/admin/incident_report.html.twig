@@ -1,0 +1,58 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block title %}
+🚨 Critical Application Incident
+{% endblock %}
+
+{% block content %}
+    <p>
+        A <strong>critical error</strong> has occurred in the <strong>Elysium</strong> application.
+    </p>
+
+    <div style="margin: 30px 0; padding: 15px; background-color: #fff5f5; border-left: 4px solid #b91c1c;">
+        <p style="margin: 0 0 8px 0;">
+            <strong>Error type:</strong>
+            {{ ctx.errorType }}
+        </p>
+
+        <p style="margin: 0 0 8px 0;">
+            <strong>Message:</strong><br>
+            {{ ctx.message }}
+        </p>
+
+        {% if ctx.file is defined and ctx.file is not null %}
+            <p style="margin: 0 0 8px 0;">
+                <strong>File:</strong>
+                {{ ctx.file }}:{{ ctx.line }}
+            </p>
+        {% endif %}
+
+        {% if ctx.environment is defined and ctx.environment is not null %}
+            <p style="margin: 0 0 8px 0;">
+                <strong>Environment:</strong>
+                {{ ctx.environment }}
+            </p>
+        {% endif %}
+
+        {% if ctx.occurredAt is defined and ctx.occurredAt is not null %}
+            <p style="margin: 0;">
+                <strong>Occurred at:</strong>
+                {{ ctx.occurredAt|date('F j, Y \\a\\t H:i:s') }}
+            </p>
+        {% endif %}
+    </div>
+
+    {% if ctx.requestId is defined and ctx.requestId is not null %}
+        <p>
+            <strong>Request ID:</strong> {{ ctx.requestId }}
+        </p>
+    {% endif %}
+
+    <p>
+        Immediate investigation is recommended.
+    </p>
+
+    <p style="margin-top: 40px;">
+        <strong>Elysium – System Alert</strong>
+    </p>
+{% endblock %}
