@@ -1,29 +1,72 @@
-<a href="{{ path('app_event_show', {'id': event.id}) }}" class="group bg-[#FDFAF5] border border-[#163260]/10 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden max-w-sm mx-auto block h-full flex flex-col">
-    <div class="h-48 relative overflow-hidden bg-gradient-to-r from-[#163260] via-[#163260]/90 to-[#C29757]/80 flex-shrink-0">
+<a href="{{ path('app_event_show', {'id': event.id | nzo_encrypt }) }}"
+   class="group bg-[#FDFAF5] border border-[#163260]/10 rounded-2xl shadow-sm
+          hover:shadow-xl hover:-translate-y-1 transition-all duration-300
+          overflow-hidden max-w-sm mx-auto block h-full flex flex-col">
+
+    <!-- Image -->
+    <div class="h-48 relative overflow-hidden bg-gradient-to-r
+                from-[#163260] via-[#163260]/90 to-[#C29757]/80 flex-shrink-0">
+
         <img src="https://picsum.photos/400/300?random={{ event.id }}"
-             alt="{{ event.nom }}"
-             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-        <span class="absolute top-4 left-4 bg-[#FDFAF5]/95 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-[#163260] shadow-md">
-            {{ event.type|title }}
-        </span>
+             alt="{{ event.name }}"
+             class="w-full h-full object-cover group-hover:scale-105
+                    transition-transform duration-500">
+
+        <div class="absolute top-4 left-4">
+            <!-- Badge type -->
+            <span class="  bg-[#FDFAF5]/95 backdrop-blur-sm
+                     px-3 py-1 rounded-full text-xs font-semibold
+                     text-[#163260] shadow-md">{{ event.type | trans }}</span>
+            <!-- Badge statut event -->
+            {% if event.status == 'annulé' %}
+                <span class=" right-4 bg-gray-100 text-gray-600
+                         px-3 py-1 rounded-full text-xs font-semibold shadow-md">Annulé</span>
+            {% endif %}
+        </div>
     </div>
 
+    <!-- Contenu -->
     <div class="p-6 flex flex-col flex-1 justify-stretch">
         <div class="flex-1 mb-auto">
             <div class="flex items-center justify-between mb-3">
-                <span class="bg-[#C29757]/20 text-[#C29757] px-3 py-1 rounded-lg text-xs font-semibold uppercase tracking-wide">
-                    {{ event.date|date('d MMM') }}
+                <span class="bg-[#C29757]/20 text-[#C29757]
+                             px-3 py-1 rounded-lg text-xs font-semibold uppercase tracking-wide">
+                    {{ event.eventDate|date('d M Y') }}
                 </span>
-                <span class="text-[#163260]/70 text-sm font-medium">{{ event.lieu }}</span>
+
+                <span class="text-[#163260]/70 text-sm font-medium">
+                    {{ event.city }}
+                </span>
             </div>
-            <h3 class="text-xl font-bold text-[#163260] mb-3 leading-tight group-hover:text-[#C29757] transition-colors line-clamp-2">
-                {{ event.nom }}
+
+            <h3 class="text-xl font-bold text-[#163260] mb-3 leading-tight
+                       group-hover:text-[#C29757] transition-colors line-clamp-2">
+                {{ event.name }}
             </h3>
-            <p class="text-[#163260]/75 mb-6 text-sm leading-relaxed line-clamp-3">{{ event.description }}</p>
+
+            <p class="text-[#163260]/75 mb-6 text-sm leading-relaxed line-clamp-3">
+                {{ event.description }}
+            </p>
         </div>
+
+        <!-- Footer -->
         <div class="flex items-center justify-between pt-4 border-t border-[#163260]/10 mt-auto">
-            <span class="text-2xl font-black text-[#C29757] drop-shadow-sm">{{ event.prix }}€</span>
-            <span class="empty-button-gold text-sm">Participer</span>
+            <span class="text-2xl font-black text-[#C29757]">
+                {{ event.price }}€
+            </span>
+            {% if event.status == 'en cours' %}
+                {% if event.remainingSeats > 0 and event.registrationEndAt > date('now') and event.registrationStartAt < date('now') %}
+                    <span class="empty-button-gold text-sm">Participer</span>
+                {% elseif event.registrationEndAt < date('now') %}
+                    <span class="text-red-600 font-semibold text-sm">Réservation cloturé</span>
+                {% elseif event.registrationStartAt > date('now') %}
+                    <span class="text-red-600 font-semibold text-sm">Prochainement</span>
+                {% endif %}
+            {% else %}
+                <span class="text-gray-400 font-semibold text-sm">
+                    Annulé
+                </span>
+            {% endif %}
         </div>
     </div>
 </a>

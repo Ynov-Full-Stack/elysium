@@ -1,0 +1,73 @@
+{# templates/dashboard/profile.html.twig #}
+{% extends 'pages/user/_layout.html.twig' %}
+
+{% block title %}Mon Profil - Elysium{% endblock %}
+
+{% block user_content %}
+    {% if app.flashes('success') %}
+        <div class="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-lg text-sm">
+            {% for message in app.flashes('success') %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="space-y-8">
+        <header>
+            <h1 class="text-4xl lg:text-5xl font-black bg-gradient-to-r from-[#163260] to-[#1e4178] bg-clip-text text-transparent mb-2">
+                Mon profil
+            </h1>
+            <p class="text-[#163260]/60 text-lg">Gérez vos informations personnelles</p>
+        </header>
+        {{ form_start(form) }}
+
+        <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-[#C29757]/20">
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    {{ form_label(form.firstname) }}
+                    {{ form_widget(form.firstname, {'attr': {'class': 'w-full px-4 py-3 border ...'}}) }}
+                </div>
+                <div>
+                    {{ form_label(form.lastname) }}
+                    {{ form_widget(form.lastname, {'attr': {'class': 'w-full px-4 py-3 border ...'}}) }}
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6 mt-4">
+                <div>
+                    {{ form_label(form.email) }}
+                    {{ form_widget(form.email, {'attr': {'class': 'w-full px-4 py-3 border ...'}}) }}
+                </div>
+                <div>
+                    {{ form_label(form.birthdate) }}
+                    {{ form_widget(form.birthdate, {'attr': {'class': 'w-full px-4 py-3 border ...'}}) }}
+                </div>
+            </div>
+
+            <button type="submit" name="profile_submit"
+                    class="w-full mt-4 bg-gradient-to-r from-[#163260] to-[#1e4178] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl">
+                Enregistrer les modifications
+            </button>
+        </div>
+
+        {{ form_end(form) }}
+
+
+        <!-- PASSWORD -->
+        <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-[#C29757]/20">
+            <h2 class="text-2xl font-black text-[#163260] mb-6">Changer mon mot de passe</h2>
+            {{ form_start(passwordForm) }}
+            <div>{{ form_label(passwordForm.currentPassword) }}
+            {{ form_widget(passwordForm.currentPassword) }}
+            </div>
+            <div>
+                {{ form_widget(passwordForm.newPassword) }}
+            </div>
+            <button type="submit" name="password_submit" class="mt-4 w-full bg-gradient-to-r from-[#C29757] to-[#d4a562] hover:from-[#d4a562] hover:to-[#C29757] text-[#163260] font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                Mettre à jour le mot de passe
+            </button>
+            {{ form_end(passwordForm) }}
+        </div>
+    </div>
+{% endblock %}

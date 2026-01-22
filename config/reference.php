@@ -974,10 +974,10 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         enabled?: bool|Param, // Default: false
  *     },
  *     cssinliner?: bool|array{
- *         enabled?: bool|Param, // Default: false
+ *         enabled?: bool|Param, // Default: true
  *     },
  *     inky?: bool|array{
- *         enabled?: bool|Param, // Default: false
+ *         enabled?: bool|Param, // Default: true
  *     },
  *     string?: bool|array{
  *         enabled?: bool|Param, // Default: false
@@ -1495,6 +1495,13 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         verify?: bool|Param, // Use only with proxy option set
  *     },
  *     clients?: array<string, array<string, mixed>>,
+ * @psalm-type NzoEncryptorConfig = array{
+ *     secret_key: scalar|null|Param,
+ *     secret_iv?: scalar|null|Param, // Default: ""
+ *     cipher_algorithm?: scalar|null|Param, // Default: "aes-256-ctr"
+ *     base64_encode?: bool|Param, // Default: true
+ *     format_base64_output?: bool|Param, // Default: true
+ *     random_pseudo_bytes?: bool|Param, // Default: true
  * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
@@ -1512,6 +1519,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     symfonycasts_tailwind?: SymfonycastsTailwindConfig,
  *     twig_component?: TwigComponentConfig,
  *     knpu_oauth2_client?: KnpuOauth2ClientConfig,
+ *     nzo_encryptor?: NzoEncryptorConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1531,6 +1539,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         symfonycasts_tailwind?: SymfonycastsTailwindConfig,
  *         twig_component?: TwigComponentConfig,
  *         knpu_oauth2_client?: KnpuOauth2ClientConfig,
+ *         nzo_encryptor?: NzoEncryptorConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1548,6 +1557,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         symfonycasts_tailwind?: SymfonycastsTailwindConfig,
  *         twig_component?: TwigComponentConfig,
  *         knpu_oauth2_client?: KnpuOauth2ClientConfig,
+ *         nzo_encryptor?: NzoEncryptorConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1566,6 +1576,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         symfonycasts_tailwind?: SymfonycastsTailwindConfig,
  *         twig_component?: TwigComponentConfig,
  *         knpu_oauth2_client?: KnpuOauth2ClientConfig,
+ *         nzo_encryptor?: NzoEncryptorConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,

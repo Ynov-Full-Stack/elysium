@@ -30,9 +30,11 @@ class ReservationFixtures extends Fixture implements DependentFixtureInterface
         $event->setDescription('Event pour réservations test');
         $event->setEventDate(new \DateTimeImmutable('2026-06-01'));
         $event->setCreatedAt(new \DateTimeImmutable());
+        $event->setRegistrationStartAt(new \DateTimeImmutable('2026-05-01'));
+        $event->setRegistrationEndAt(new \DateTimeImmutable('2026-05-29'));
         $event->setPrice(50.0);
         $event->setTotalSeats(100);
-        $event->setOrganizer($organizer); // ← AJOUTÉ
+        $event->setOrganizer($organizer);
         $event->setType(\App\Enum\EventType::CONCERT);
         $event->setVenueName('Test Arena');
         $event->setCity('Lyon');
@@ -56,6 +58,7 @@ class ReservationFixtures extends Fixture implements DependentFixtureInterface
             $reservation->setEvent($event);
             $reservation->setUser($users[$i % 3]);
             $reservation->setSeatQuantity($faker->numberBetween(1, 4));
+            $reservation->setStatus($faker->randomElement(['en cours', 'annulé']));
             $manager->persist($reservation);
         }
 

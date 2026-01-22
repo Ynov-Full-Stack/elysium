@@ -31,6 +31,11 @@ class Reservation
 
     #[ORM\Column(type: 'json')]
     private array $sentReminderOffsets = [];
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $stripeSessionId = null;
+
+    #[ORM\Column(length: 30)]
+    private ?string $status;
 
     #[ORM\PrePersist]
     public function prePersist(): void
@@ -107,5 +112,27 @@ class Reservation
         if (!$this->hasReminderBeenSent($offset)) {
             $this->sentReminderOffsets[] = $offset;
         }
+    public function getStripeSessionId(): ?string
+    {
+        return $this->stripeSessionId;
+    }
+
+    public function setStripeSessionId(?string $stripeSessionId): static
+    {
+        $this->stripeSessionId = $stripeSessionId;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
     }
 }
