@@ -1,0 +1,50 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block title %}
+Reservation Cancelled by User
+{% endblock %}
+
+{% block content %}
+    <p>
+        A reservation has been <strong>cancelled</strong> by a user on <strong>Elysium</strong>.
+    </p>
+
+    <div style="margin: 30px 0; padding: 15px; background-color: #f9f9f9; border-left: 4px solid #b91c1c;">
+        <p style="margin: 0 0 8px 0;">
+            <strong>User:</strong>
+            {{ ctx.reservation.user.firstname }} {{ ctx.reservation.user.lastname }} ({{ ctx.reservation.user.email }})
+        </p>
+
+        <p style="margin: 0 0 8px 0;">
+            <strong>Event:</strong>
+            {{ ctx.reservation.event.name }}
+        </p>
+
+        <p style="margin: 0 0 8px 0;">
+            <strong>Event date:</strong>
+            {{ ctx.reservation.event.eventDate|date('F j, Y \\a\\t H:i') }}
+        </p>
+
+        <p style="margin: 0 0 8px 0;">
+            <strong>Seats cancelled:</strong>
+            {{ ctx.reservation.seatQuantity }}
+        </p>
+
+        <p style="margin: 0;">
+            <strong>Reservation made on:</strong>
+            {{ ctx.reservation.createdAt|date('F j, Y \\a\\t H:i') }}
+        </p>
+    </div>
+
+    <p>
+        The cancelled seats are now available again for this event.
+    </p>
+
+    <p>
+        No action is required unless this cancellation impacts event capacity or logistics.
+    </p>
+
+    <p style="margin-top: 40px;">
+        <strong>Elysium – Admin Notification</strong>
+    </p>
+{% endblock %}
