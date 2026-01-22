@@ -27,7 +27,7 @@ final class MailMessage {
     public static function reservationCreation(User $user, Reservation $reservation): self {
         return new self(
             to: $user->getEmail(),
-            subject: "Account Deletion",
+            subject: "New Reservation Made",
             template: "emails/reservation_creation.html.twig",
             context: ContextFactory::reservationCreation($user, $reservation)
         );
@@ -35,7 +35,7 @@ final class MailMessage {
     public static function reservationModification(User $user, Reservation $reservation): self {
         return new self(
             to: $user->getEmail(),
-            subject: "Account Deletion",
+            subject: "Reservation Edited",
             template: "emails/reservation_modification.html.twig",
             context: ContextFactory::reservationModification($user, $reservation)
         );
@@ -43,7 +43,7 @@ final class MailMessage {
     public static function reservationCancellation(User $user, Reservation $reservation): self {
         return new self(
             to: $user->getEmail(),
-            subject: "Account Deletion",
+            subject: "Reservation Cancelled",
             template: "emails/reservation_cancellation.html.twig",
             context: ContextFactory::reservationCancellation($user, $reservation)
         );
@@ -51,7 +51,7 @@ final class MailMessage {
     public static function reservationReminder(User $user, Reservation $reservation): self {
         return new self(
             to: $user->getEmail(),
-            subject: "Account Deletion",
+            subject: "Reservation Reminder",
             template: "emails/reservation_reminder.html.twig",
             context: ContextFactory::reservationReminder($user, $reservation)
         );
@@ -68,7 +68,7 @@ final class MailMessage {
     public static function adminReservationCreation(User $user, Reservation $reservation): self {
         return new self(
             to: $user->getEmail(),
-            subject: "Account Deletion",
+            subject: "A User has Made a New Reservation",
             template: "emails/admin/reservation_creation.html.twig",
             context: ContextFactory::adminReservationCreation($user, $reservation)
         );
@@ -76,17 +76,27 @@ final class MailMessage {
     public static function adminReservationCancellation(User $user, Reservation $reservation): self {
         return new self(
             to: $user->getEmail(),
-            subject: "Account Deletion",
+            subject: "A User has Cancelled their Reservation",
             template: "emails/admin/reservation_cancellation.html.twig",
             context: ContextFactory::adminReservationCancellation($user, $reservation)
         );
     }
-    public static function adminIncident(User $user, Reservation $reservation): self {
+    public static function adminIncident(
+        User $user,
+        String $errorType,
+        String $message,
+        ?String $file = null,
+        ?int $line = null,
+        ?String $environment = null,
+        ?\DateTimeImmutable $occurredAt = null,
+        ?String $requestId = null,
+        ?array $stackTrace = null, // trimmed & safe
+    ): self {
         return new self(
             to: $user->getEmail(),
-            subject: "Account Deletion",
+            subject: "Important: An Incident Occurred",
             template: "emails/admin/incident_report.html.twig",
-            context: ContextFactory::adminIncident($user, $reservation)
+            context: ContextFactory::adminIncident($errorType, $message, $file, $line, $environment, $occurredAt ?? new \DateTimeImmutable(), $requestId, $stackTrace)
         );
     }
 }
@@ -128,8 +138,17 @@ final class ContextFactory {
     public static function adminReservationCancellation(User $user, Reservation $reservation): Context {
         return new AdminReservationCancellationContext($user, $reservation);
     }
-    public static function adminIncident(User $user, Reservation $reservation): Context {
-        return new AdminIncidentContext($user, $reservation);
+    public static function adminIncident(
+        string $errorType,
+        string $message,
+        ?string $file,
+        ?int $line,
+        ?string $environment,
+        ?\DateTimeImmutable $occurredAt,
+        ?string $requestId,
+        ?array $stackTrace, // trimmed & safe
+    ): Context {
+        return new AdminIncidentContext($errorType, $message, $file, $line, $environment, $occurredAt, $requestId, $stackTrace);
     }
 
 }

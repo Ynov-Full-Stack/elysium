@@ -21,7 +21,7 @@ use App\Mail\MailService;
     name: 'app:mail:adminIncident',
     description: 'Send a test reservation email'
 )]
-class AdminIncident extends Command
+class AdminIncidentCommand extends Command
 {
     public function __construct(
         private MailService $mailService
@@ -74,7 +74,7 @@ class AdminIncident extends Command
         $currentReservation->setSeatQuantity(2);
         $currentReservation->setUser($currentUser);
         
-        $this->mailService->send(MailMessage::adminIncident($currentUser, $currentReservation));
+        $this->mailService->send(MailMessage::adminIncident($currentUser, "Warning", "An oopsi as occurred"));
 
         $output->writeln('<info>Email dispatched successfully</info>');
 
