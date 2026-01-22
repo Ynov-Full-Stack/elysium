@@ -5,6 +5,8 @@ namespace App\Controller\Admin;
 use App\Entity\Event;
 use App\Enum\EventType;
 use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
@@ -85,7 +87,7 @@ class EventCrudController extends AbstractCrudController
             ChoiceField::new('type', "Type d'événement")
                 ->setChoices($typeChoices)
                 ->setRequired(true)
-            ->setColumns('col-md-4'),
+                ->setColumns('col-md-4'),
             ChoiceField::new('status', "Statut")
                 ->setChoices($statusChoices)
                 ->setRequired(true)
@@ -94,15 +96,22 @@ class EventCrudController extends AbstractCrudController
                 ->setColumns('col-md-4'),
             // TODO : faut il récupéré tout les admin ou seulement celui connecté
             AssociationField::new('organizer', "Organisateur de l'événement")
-            ->setQueryBuilder(function (QueryBuilder $queryBuilder) {
-                return $queryBuilder
-                    ->select('u')
-                    ->from('App\Entity\User', 'u')
-                    ->where('u.roles LIKE :role')
-                    ->setParameter('role', '%"ROLE_ADMIN"%')
-                    ->orderBy('u.lastname', 'ASC');
-            }),
+                ->setQueryBuilder(function (QueryBuilder $queryBuilder) {
+                    return $queryBuilder
+                        ->select('u')
+                        ->from('App\Entity\User', 'u')
+                        ->where('u.roles LIKE :role')
+                        ->setParameter('role', '%"ROLE_ADMIN"%')
+                        ->orderBy('u.lastname', 'ASC');
+                }),
 
         ];
+
+    }
+
+    function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->disable(Action::DELETE);
     }
 }
