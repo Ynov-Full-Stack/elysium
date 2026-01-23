@@ -23,8 +23,6 @@ final class EventController extends AbstractController
         $cities = $eventRepository->findDistinctCities();
         $types = $eventRepository->findDistinctTypes($translator);
 
-        // TODO : filter type doesn't work
-
         return $this->render('pages/event/index.html.twig', [
             'events' => $data['events'],
             'pagination' => [

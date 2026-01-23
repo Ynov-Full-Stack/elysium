@@ -44,13 +44,13 @@
                                     Type d'événement
                                 </label>
                                 <div class="space-y-2">
-                                    {% for typeName in types %}
+                                    {% for enumName, typeLabel in types %}
                                         <label class="flex items-center p-3 bg-[#FDFAF5] rounded-xl cursor-pointer hover:shadow-md transition-all">
-                                            <input type="checkbox" name="types[]" value="{{ typeName }}"
-                                                {% if typeName in app.request.get('types', []) %}checked{% endif %}
+                                            <input type="checkbox" name="types[]" value="{{ enumName }}"
+                                                   {% if enumName in app.request.get('types', []) %}checked{% endif %}
                                                    class="w-4 h-4 text-[#C29757] rounded focus:ring-[#C29757]">
                                             <span class="ml-3 text-sm font-medium text-[#163260]">
-            {{ typeName|lower|title }}
+            {{ typeLabel }}
         </span>
                                         </label>
                                     {% endfor %}
