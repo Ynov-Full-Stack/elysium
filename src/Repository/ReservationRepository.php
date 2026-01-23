@@ -17,11 +17,7 @@ class ReservationRepository extends ServiceEntityRepository
         parent::__construct($registry, Reservation::class);
     }
 
-    public function findForReminder(
-        \DateInterval $interval,
-        string $offsetKey,
-        int $toleranceMinutes = 5
-    ): array {
+    public function findForReminder(\DateInterval $interval, int $toleranceMinutes = 5): array {
         $now = new \DateTimeImmutable();
         
         $targetTime = $now->add($interval);
@@ -36,6 +32,8 @@ class ReservationRepository extends ServiceEntityRepository
             ->setParameter('end', $end)
             ->getQuery()
             ->getResult();
+    }
+
     public function getAccountStat(User $user):array
     {
         $now = new \DateTimeImmutable();
