@@ -2,9 +2,9 @@
 
 namespace App\Mail;
 
-use App\Mail\Context;
+use App\Mail\ContextInterface;
 
-final class AdminIncidentContext implements Context{
+final class AdminIncidentContext implements ContextInterface{
     public function __construct(
         public readonly string $errorType,
         public readonly string $message,

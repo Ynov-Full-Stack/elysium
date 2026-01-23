@@ -5,7 +5,7 @@ namespace App\Mail;
 use App\Entity\User;
 use App\Entity\Event;
 use App\Entity\Reservation;
-use App\Mail\Context;
+use App\Mail\ContextInterface;
 use App\Mail\ReservationCreationContext;
 use App\Mail\ReservationModificationContext;
 use App\Mail\ReservationCancellationContext;
@@ -21,7 +21,7 @@ final class MailMessage {
         public readonly string $to,
         public readonly string $subject,
         public readonly string $template,
-        public readonly Context $context,
+        public readonly ContextInterface $context,
     ) {}
     
     // FOR ANY NEW BUILDER ALWAYS HAVE THE DESTINATION USER BE THE FIRST ARGUMENT.
@@ -116,26 +116,26 @@ final class ContextFactory {
     // Annulation d’une réservation
     // Incident critique (optionnel)
 
-    public static function reservationCreation(User $user, Reservation $reservation): Context {
+    public static function reservationCreation(User $user, Reservation $reservation): ContextInterface {
         return new ReservationCreationContext($user, $reservation);
     }
-    public static function reservationModification(User $user, Reservation $reservation): Context {
+    public static function reservationModification(User $user, Reservation $reservation): ContextInterface {
         return new ReservationModificationContext($user, $reservation);
     }
-    public static function reservationCancellation(User $user, Reservation $reservation): Context {
+    public static function reservationCancellation(User $user, Reservation $reservation): ContextInterface {
         return new ReservationCancellationContext($user, $reservation);
     }
-    public static function reservationReminder(User $user, Reservation $reservation): Context {
+    public static function reservationReminder(User $user, Reservation $reservation): ContextInterface {
         return new ReservationReminderContext($user, $reservation);
     }
-    public static function accountDeletion(User $user): Context {
+    public static function accountDeletion(User $user): ContextInterface {
         return new AccountDeletionContext($user);
     }
 
-    public static function adminReservationCreation(User $user, Reservation $reservation): Context {
+    public static function adminReservationCreation(User $user, Reservation $reservation): ContextInterface {
         return new AdminReservationCreationContext($user, $reservation);
     }
-    public static function adminReservationCancellation(User $user, Reservation $reservation): Context {
+    public static function adminReservationCancellation(User $user, Reservation $reservation): ContextInterface {
         return new AdminReservationCancellationContext($user, $reservation);
     }
     public static function adminIncident(
@@ -147,7 +147,7 @@ final class ContextFactory {
         ?\DateTimeImmutable $occurredAt,
         ?string $requestId,
         ?array $stackTrace, // trimmed & safe
-    ): Context {
+    ): ContextInterface {
         return new AdminIncidentContext($errorType, $message, $file, $line, $environment, $occurredAt, $requestId, $stackTrace);
     }
 
