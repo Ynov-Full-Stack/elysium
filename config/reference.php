@@ -1487,14 +1487,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     },
  *     controllers_json?: scalar|null|Param, // Deprecated: The "twig_component.controllers_json" config option is deprecated, and will be removed in 3.0. // Default: null
  * }
- * @psalm-type KnpuOauth2ClientConfig = array{
- *     http_client?: scalar|null|Param, // Service id of HTTP client to use (must implement GuzzleHttp\ClientInterface) // Default: null
- *     http_client_options?: array{
- *         timeout?: int|Param,
- *         proxy?: scalar|null|Param,
- *         verify?: bool|Param, // Use only with proxy option set
- *     },
- *     clients?: array<string, array<string, mixed>>,
  * @psalm-type NzoEncryptorConfig = array{
  *     secret_key: scalar|null|Param,
  *     secret_iv?: scalar|null|Param, // Default: ""
@@ -1518,7 +1510,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     monolog?: MonologConfig,
  *     symfonycasts_tailwind?: SymfonycastsTailwindConfig,
  *     twig_component?: TwigComponentConfig,
- *     knpu_oauth2_client?: KnpuOauth2ClientConfig,
  *     nzo_encryptor?: NzoEncryptorConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
@@ -1538,7 +1529,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         maker?: MakerConfig,
  *         symfonycasts_tailwind?: SymfonycastsTailwindConfig,
  *         twig_component?: TwigComponentConfig,
- *         knpu_oauth2_client?: KnpuOauth2ClientConfig,
  *         nzo_encryptor?: NzoEncryptorConfig,
  *     },
  *     "when@prod"?: array{
@@ -1556,7 +1546,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         monolog?: MonologConfig,
  *         symfonycasts_tailwind?: SymfonycastsTailwindConfig,
  *         twig_component?: TwigComponentConfig,
- *         knpu_oauth2_client?: KnpuOauth2ClientConfig,
  *         nzo_encryptor?: NzoEncryptorConfig,
  *     },
  *     "when@test"?: array{
@@ -1575,7 +1564,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         monolog?: MonologConfig,
  *         symfonycasts_tailwind?: SymfonycastsTailwindConfig,
  *         twig_component?: TwigComponentConfig,
- *         knpu_oauth2_client?: KnpuOauth2ClientConfig,
  *         nzo_encryptor?: NzoEncryptorConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
