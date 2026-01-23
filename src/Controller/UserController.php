@@ -6,6 +6,8 @@ use App\Entity\User;
 use App\Form\ChangePasswordType;
 use App\Form\Model\ChangePassword;
 use App\Form\UserAccountType;
+use App\Mail\MailMessage;
+use App\Mail\MailService;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Nzo\UrlEncryptorBundle\Annotations\ParamDecryptor;
@@ -20,7 +22,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 class UserController extends AbstractController
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager,)
+    public function __construct(private readonly MailService $mailService, private readonly EntityManagerInterface $entityManager,)
     {
     }
     #[Route('/', name: 'app_user_index')]
@@ -106,6 +108,7 @@ class UserController extends AbstractController
         $submittedToken = $request->request->get('_token');
         if ($this->isCsrfTokenValid('delete-user' . $user->getId(), $submittedToken)) {
             $this->entityManager->remove($user);
+            $this->mailService->send(MailMessage::accountDeletion($user));
             $this->entityManager->flush();
             $this->addFlash('success_user', 'Utilisateur supprimé avec succès.');
         } else {

@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ReservationController extends AbstractController
 {
-    public function __construct(private MailService $mailService, private UserRepository $userRepository) {}
+    public function __construct(private readonly MailService $mailService, private readonly UserRepository $userRepository) {}
 
     #[Route('/reservation/{id}/cancel', name: 'app_reservation_cancel', methods: ['POST'])]
     public function cancel(Reservation $reservation, EntityManagerInterface $entityManager): Response
