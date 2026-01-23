@@ -69,5 +69,19 @@
             </button>
             {{ form_end(passwordForm) }}
         </div>
+
+        <!-- DELETE account -->
+        <div>
+            <form method="post" action="{{ path('app_user_delete', { 'id': app.user.id | nzo_encrypt }) }}"
+                  onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');">
+                <input type="hidden" name="_token"
+                       value="{{ csrf_token('delete-user' ~ app.user.id) }}">
+                <button
+                    class="flex items-center gap-4 p-4 rounded-2xl bg-red-50 text-red-600 font-semibold hover:bg-red-200 border border-red-200/50 hover:shadow-md transition-all duration-300 justify-center">
+                    {% include 'icons/trash.svg' %}
+                    Supprimer mon compte
+                </button>
+            </form>
+        </div>
     </div>
 {% endblock %}
