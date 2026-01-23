@@ -27,7 +27,7 @@ final class MailService
     // );
     // $this->mailService->sendToMany($messages);
 
-    public function buildMessages(iterable $users, callable $factory, array $args = []): array {
+    public function buildAndSendMessages(iterable $users, callable $factory, array $args = []) {
         $messages = [];
 
         foreach ($users as $user) {
@@ -37,13 +37,15 @@ final class MailService
             );
         }
 
-        return $messages;
-    }
-
-    public function sendToMany(iterable $messages): void
-    {
         foreach ($messages as $message) {
             $this->send($message);
         }
     }
+
+    // public function sendToMany(iterable $messages): void
+    // {
+    //     foreach ($messages as $message) {
+    //         $this->send($message);
+    //     }
+    // }
 }

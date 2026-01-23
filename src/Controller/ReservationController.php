@@ -26,12 +26,11 @@ final class ReservationController extends AbstractController
         $entityManager->flush();
 
         $this->mailService->send(MailMessage::reservationCancellation($this->getUser(), $reservation));
-        $messages = $this->mailService->buildMessages(
+        $this->mailService->buildAndSendMessages(
             users: $this->userRepository->findAdmins(),
             factory: [MailMessage::class, 'adminReservationCancellation'],
             args: [$reservation]
         );
-        $this->mailService->sendToMany($messages);
 
         $this->addFlash('success', 'Reservation annulée avec succès');
 
