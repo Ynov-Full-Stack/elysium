@@ -109,6 +109,61 @@ class ReservationRepository extends ServiceEntityRepository
         }, $results);
     }
 
+    public function countReservationsByUserWithFilters(User $user, string $filter = 'all'): int
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->select('COUNT(r.id)')
+            ->join('r.event', 'e')
+            ->where('r.user = :user')
+            ->setParameter('user', $user);
+
+        $now = new \DateTimeImmutable('today');
+
+        if ($filter === 'upcoming') {
+            $qb->andWhere('e.eventDate >= :now')
+                ->setParameter('now', $now);
+        } elseif ($filter === 'past') {
+            $qb->andWhere('e.eventDate < :now')
+                ->setParameter('now', $now);
+        }
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+    public function findByUserWithFilters(User $user, string $filter = 'all', int $page = 1, int $limit = 10): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->join('r.event', 'e')
+            ->where('r.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('r.createdAt', 'DESC');
+
+        $now = new \DateTimeImmutable('today');
+
+        if ($filter === 'upcoming') {
+            $qb->andWhere('e.eventDate >= :now')
+                ->setParameter('now', $now);
+        } elseif ($filter === 'past') {
+            $qb->andWhere('e.eventDate < :now')
+                ->setParameter('now', $now);
+        }
+
+        // Pagination manuelle
+        $totalItems = $this->countReservationsByUserWithFilters($user, $filter);
+        $totalPages = ceil($totalItems / $limit);
+
+        $qb->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit);
+
+        return [
+            'items' => $qb->getQuery()->getResult(),
+            'pagination' => [
+                'currentPage' => $page,
+                'totalPages' => max(1, $totalPages),
+                'totalItems' => $totalItems,
+            ]
+        ];
+    }
+
     //    /**
     //     * @return Reservation[] Returns an array of Reservation objects
     //     */
