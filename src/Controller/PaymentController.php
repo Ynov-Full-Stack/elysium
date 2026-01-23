@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[Route('/payment')]
 class PaymentController extends AbstractController
 {
-    public function __construct(private MailService $mailService, private UserRepository $userRepository) {}
+    public function __construct(private readonly MailService $mailService, private readonly UserRepository $userRepository) {}
 
     #[Route('/checkout/{id}', name: 'stripe_checkout', methods: ['POST'])]
     public function checkout(Event $event, Request $request, UrlGeneratorInterface $urlGenerator): Response
