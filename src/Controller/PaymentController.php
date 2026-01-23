@@ -111,12 +111,11 @@ class PaymentController extends AbstractController
                 $reservation->setStripeSessionId($session->id);
 
                 $this->mailService->send(MailMessage::reservationCreation($this->getUser(), $reservation));
-                $messages = $this->mailService->buildMessages(
+                $this->mailService->buildAndSendMessages(
                     users: $this->userRepository->findAdmins(),
                     factory: [MailMessage::class, 'adminReservationCreation'],
                     args: [$reservation]
                 );
-                $this->mailService->sendToMany($messages);
 
                 $entityManager->persist($reservation);
                 $entityManager->flush();
