@@ -76,7 +76,7 @@ class AdminIncidentCommand extends Command
         
         // $this->mailService->send(MailMessage::adminIncident($currentUser, "Warning", "An oopsi as occurred"));
 
-        $messages = $this->mailService->buildMessages(
+        $this->mailService->buildAndSendMessages(
             users: [$currentUser, $currentOrganizer],
             factory: [MailMessage::class, 'adminIncident'],
             args: [
@@ -85,7 +85,7 @@ class AdminIncidentCommand extends Command
             ]
         );
 
-        $this->mailService->sendToMany($messages);
+        // $this->mailService->sendToMany($messages);
 
         $output->writeln('<info>Email dispatched successfully</info>');
 
