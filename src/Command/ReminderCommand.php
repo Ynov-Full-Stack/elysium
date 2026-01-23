@@ -45,7 +45,7 @@ final class ReminderCommand extends Command {
             $output->writeln("<info>Checking reservations' events from ".$start." to ".$end."</info>");
             
             $reservations = array_filter(
-                $this->reservationRepository->findForReminder($interval, $key),
+                $this->reservationRepository->findForReminder($interval),
                 fn (Reservation $r) => !$r->hasReminderBeenSent($key)
             );
 
