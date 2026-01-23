@@ -1,4 +1,5 @@
 <a href="{{ path('app_event_show', {'id': event.id | nzo_encrypt }) }}"
+   data-turbo-frame="_top"
    class="group bg-[#FDFAF5] border border-[#163260]/10 rounded-2xl shadow-sm
           hover:shadow-xl hover:-translate-y-1 transition-all duration-300
           overflow-hidden max-w-sm mx-auto block h-full flex flex-col w-full">
@@ -55,10 +56,10 @@
                 {{ event.price }}€
             </span>
             {% if event.status == 'en cours' %}
-                {% if event.remainingSeats > 0 and event.registrationEndAt > date('now') and event.registrationStartAt < date('now') %}
+                {% if event.remainingSeats > 0 and event.registrationEndAt > date('now')%}
                     <span class="empty-button-gold text-sm">Participer</span>
                 {% elseif event.registrationEndAt < date('now') %}
-                    <span class="text-red-600 font-semibold text-sm">Réservation cloturé</span>
+                    <span class="text-red-600 font-semibold text-sm">Réservation cloturée</span>
                 {% elseif event.registrationStartAt > date('now') %}
                     <span class="text-red-600 font-semibold text-sm">Prochainement</span>
                 {% endif %}
