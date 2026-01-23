@@ -42,8 +42,8 @@ class EventCrudController extends AbstractCrudController
         );
 
         $statusChoices = [
-            'En cours' => 'ongoing',
-            'Annulé' => 'cancelled',
+            'En cours' => 'en cours',
+            'Annulé' => 'annulé',
         ];
 
         return [
@@ -55,7 +55,8 @@ class EventCrudController extends AbstractCrudController
                 ->setThousandsSeparator(' ')
                 ->setDecimalSeparator(',')
                 ->setStoredAsString(false)
-                ->setColumns('col-md-2'),
+                ->setColumns('col-md-2')
+                ->onlyOnForms(),
             TextEditorField::new('description', "Description"),
             // Date
             FormField::addFieldset('Dates')
@@ -63,28 +64,36 @@ class EventCrudController extends AbstractCrudController
             DateField::new('eventDate', "Date de l'événement")
                 ->setColumns('col-md-4'),
             DateField::new('registrationStartAt', "Date d'ouverture des réservations")
-                ->setColumns('col-md-4'),
+                ->setColumns('col-md-4')
+            ->onlyOnForms(),
             DateField::new('registrationEndAt', "Date de fermeture des réservations")
-                ->setColumns('col-md-4'),
+                ->setColumns('col-md-4')
+                ->onlyOnForms(),
             // localisation
             FormField::addFieldset('Localisation')
                 ->setIcon('fa fa-map-marker'),
             CountryField::new('country', "Pays")
-                ->setColumns('col-md-4'),
+                ->setColumns('col-md-4')
+            ->onlyOnForms(),
             TextField::new('city', "Ville")
                 ->setColumns('col-md-4'),
             TextField::new('postalCode', 'Code postal')
-                ->setColumns('col-md-4'),
+                ->setColumns('col-md-4')
+                ->onlyOnForms(),
             TextField::new('streetNumber', 'Numéro de rue')
-                ->setColumns('col-md-4'),
+                ->setColumns('col-md-4')
+                ->onlyOnForms(),
             TextField::new('street', 'Nom de la Rue')
-                ->setColumns('col-md-4'),
+                ->setColumns('col-md-4')
+                ->onlyOnForms(),
             TextField::new('venueName', "Nom de l'établissement")
-                ->setColumns('col-md-4'),
+                ->setColumns('col-md-4')
+                ->onlyOnForms(),
             // information
             FormField::addFieldset('Information complémentaire')
                 ->setIcon('fa fa-info-circle'),
             ChoiceField::new('type', "Type d'événement")
+                ->formatValue(fn($value) => $value instanceof EventType ? $value->trans($this->translator) : $value)
                 ->setChoices($typeChoices)
                 ->setRequired(true)
                 ->setColumns('col-md-4'),
@@ -93,18 +102,20 @@ class EventCrudController extends AbstractCrudController
                 ->setRequired(true)
                 ->setColumns('col-md-4'),
             IntegerField::new('totalSeats', "Nombre total de place")
-                ->setColumns('col-md-4'),
+                ->setColumns('col-md-4')
+                ->onlyOnForms(),
             // TODO : faut il récupéré tout les admin ou seulement celui connecté
             AssociationField::new('organizer', "Organisateur de l'événement")
-                ->setQueryBuilder(function (QueryBuilder $queryBuilder) {
-                    return $queryBuilder
-                        ->select('u')
-                        ->from('App\Entity\User', 'u')
-                        ->where('u.roles LIKE :role')
-                        ->setParameter('role', '%"ROLE_ADMIN"%')
-                        ->orderBy('u.lastname', 'ASC');
-                }),
-
+            ->setQueryBuilder(function (QueryBuilder $queryBuilder) {
+                return $queryBuilder
+                    ->select('u')
+                    ->from('App\Entity\User', 'u')
+                    ->where('u.roles LIKE :role')
+                    ->setParameter('role', '%"ROLE_ADMIN"%')
+                    ->orderBy('u.lastname', 'ASC');
+            }),
+            DateField::new('createdAt', "Date de création")
+                ->onlyOnIndex(),
         ];
 
     }

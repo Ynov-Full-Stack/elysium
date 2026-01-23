@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\ChangePasswordType;
 use App\Form\Model\ChangePassword;
 use App\Form\UserAccountType;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Nzo\UrlEncryptorBundle\Annotations\ParamDecryptor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +20,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 class UserController extends AbstractController
 {
+    public function __construct(private readonly EntityManagerInterface $entityManager,)
+    {
+    }
     #[Route('/', name: 'app_user_index')]
     public function index(ReservationRepository $reservationRepository): Response
     {
@@ -69,27 +74,44 @@ class UserController extends AbstractController
     }
 
     #[Route('/reservations', name: 'app_user_reservations')]
-    public function reservations(ReservationRepository $reservationRepository): Response
+    public function reservations(ReservationRepository $reservationRepository, Request $request): Response
     {
-        // add annulation
 
-        $reservations = $reservationRepository->findBy(['user' => $this->getUser()], ['createdAt' => 'DESC']);
+        $filter = $request->query->get('filter', 'all');
+        $page = $request->query->getInt('page', 1);
 
-        $pagination = [
-            'currentPage' => 1,
-            'totalPages' => 1
-        ];
+        $result = $reservationRepository->findByUserWithFilters(
+            $this->getUser(),
+            $filter,
+            $page
+        );
 
         return $this->render('pages/user/reservations.html.twig', [
-            'reservations' => $reservations,
-            'pagination' => $pagination
+            'reservations' => $result['items'],
+            'pagination' => $result['pagination'],
+            'filter' => $filter,
         ]);
     }
 
     #[Route('/preferences', name: 'app_user_preferences')]
     public function preferences(): Response
     {
-        // inside add delete account, newsletter,
         return $this->render('pages/user/preferences.html.twig');
+    }
+
+    #[Route('/delete/{id}', name: 'app_user_delete')]
+    #[ParamDecryptor(['id'])]
+    public function delete(Request $request, User $user): Response
+    {
+        $submittedToken = $request->request->get('_token');
+        if ($this->isCsrfTokenValid('delete-user' . $user->getId(), $submittedToken)) {
+            $this->entityManager->remove($user);
+            $this->entityManager->flush();
+            $this->addFlash('success_user', 'Utilisateur supprimé avec succès.');
+        } else {
+            $this->addFlash('error', 'Token CSRF invalide.');
+        }
+
+        return $this->redirectToRoute('app_home');
     }
 }
