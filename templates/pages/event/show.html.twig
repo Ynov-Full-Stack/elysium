@@ -182,10 +182,10 @@
                             <h3 class="text-xl font-bold text-[#163260] mb-4">Organisé par</h3>
                             <div class="flex items-center gap-4">
                                 <div class="w-12 h-12 bg-[#C29757] rounded-full flex items-center justify-center text-white font-bold text-lg">
-                                    {{ event.organizer.firstname|first|upper }}{{ event.organizer.lastname|first|upper }}
+                                    {{ event.organizer.displayName|first|upper }}
                                 </div>
                                 <div>
-                                    <p class="font-semibold text-[#163260]">{{ event.organizer.firstname }} {{ event.organizer.lastname }}</p>
+                                    <p class="font-semibold text-[#163260]">{{ event.organizer.displayName }}</p>
                                     {% if event.organizer.email is defined %}
                                         <p class="text-sm text-gray-600">{{ event.organizer.email }}</p>
                                     {% endif %}

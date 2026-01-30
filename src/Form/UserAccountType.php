@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use function Sodium\add;
 
 class UserAccountType extends AbstractType
 {
@@ -22,19 +23,12 @@ class UserAccountType extends AbstractType
                     'placeholder' => 'Email',
                 ]
             ])
-            ->add('firstname', TextType::class, [
-                'label' => 'Prénom',
-                'required' => true,
-                'constraints' => [
-                    new NotBlank(['message' => 'Veuillez renseigner votre prénom.']),
-                ],
-            ])
-            ->add('lastname', TextType::class, [
-                'label' => 'Nom',
-                'required' => true,
-                'constraints' => [
-                    new NotBlank(['message' => 'Veuillez renseigner votre nom.']),
-                ],
+            ->add('displayName', TextType::class, [
+                'label' => 'Nom complet',
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Nom complet'
+                ]
             ])
             ->add('birthdate', DateType::class, [
                 'label' => 'Date de naissance',

@@ -8,8 +8,6 @@ class SupabaseProvider implements UserProviderInterface
 {
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
-        // L'authentification Supabase est faite dans l'authenticator
-        // On crée juste un user "vide" qui sera validé par verifySupabaseCredentials
         return new SupabaseUser(['email' => $identifier]);
     }
 
@@ -18,7 +16,7 @@ class SupabaseProvider implements UserProviderInterface
         if (!$user instanceof SupabaseUser) {
             throw new \RuntimeException('Compte non supporté');
         }
-        return $user;
+        return new SupabaseUser($user->getSupabaseData());
     }
 
     public function supportsClass(string $class): bool

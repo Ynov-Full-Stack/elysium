@@ -6,6 +6,7 @@ use App\Entity\Reservation;
 use App\Mail\MailMessage;
 use App\Mail\MailService;
 use App\Repository\UserRepository;
+use App\Security\UserResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,9 +17,14 @@ final class ReservationController extends AbstractController
     public function __construct(private readonly MailService $mailService, private readonly UserRepository $userRepository) {}
 
     #[Route('/reservation/{id}/cancel', name: 'app_reservation_cancel', methods: ['POST'])]
-    public function cancel(Reservation $reservation, EntityManagerInterface $entityManager): Response
+    public function cancel(
+        Reservation $reservation,
+        EntityManagerInterface $entityManager,
+        UserResolver $userResolver
+    ): Response
     {
-        if ($reservation->getUser() !== $this->getUser()) {
+        $user = $userResolver->resolve($this->getUser());
+        if ($reservation->getUser() !== $user) {
             throw $this->createAccessDeniedException();
         }
         $reservation->setStatus('annulée');
