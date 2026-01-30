@@ -77,15 +77,13 @@ final class AuthController extends AbstractController
                     $body = json_decode($response->getBody(), true);
                     $accessToken = $body['access_token'] ?? null;
                     $user = $body['user'] ?? null;
-                    // If auto-confirm is on, we might get a token right away
+
                     if ($accessToken) {
                         $session->set('access_token', $accessToken);
                         $session->set('user', $user);
-                        return $this->redirectToRoute('app_home');
+                        $this->addFlash('success', 'Votre compte a bien été créé !');
+                        return $this->redirectToRoute('app_login_supabase');
                     }
-                    // otherwise, tell them to check email
-                    $this->addFlash('success', 'Check your email to confirm your account.');
-                    return $this->redirectToRoute('app_login_supabase');
                 } catch (RequestException $e) {
                     $errorBody = $e->hasResponse() ? (string)$e->getResponse()->getBody() : $e->getMessage();
                     $decodedError = json_decode($errorBody, true);
@@ -93,7 +91,6 @@ final class AuthController extends AbstractController
                 }
             }
         }
-
         return $this->render('pages/auth/register.html.twig', [
             'error' => $error,
         ]);
