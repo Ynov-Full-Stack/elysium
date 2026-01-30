@@ -237,9 +237,17 @@
                                     </div>
                                     <button type="submit"
                                             data-turbo="false"
-                                            class="w-full bg-gradient-to-r from-[#163260] to-[#1e4178] hover:from-[#1e4178] hover:to-[#163260] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                                            class="w-full bg-gradient-to-r from-[#163260] to-[#1e4178] hover:from-[#1e4178] hover:to-[#163260] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                                            onclick="change()"
+                                            id="reserve"
+                                            >
                                         Réserver maintenant
                                     </button>
+                                    <script>
+                                        function change() {
+                                            document.getElementById("reserve").firstChild.nodeValue = "Loading..."
+                                        }
+                                    </script>
                                 </form>
                             {% elseif event.remainingSeats == 0 %}
                                 <div

@@ -21,7 +21,7 @@ class UserFixtures extends Fixture
 
         // Admin
         $admin = new User();
-        $admin->setEmail('admin@events.fr');
+        $admin->setEmail('admin@events.SHOULDNOTEXIST.fr');
         $admin->setPassword($this->hasher->hashPassword($admin, 'admin123'));
         $admin->setRoles(['ROLE_ADMIN']);
         $admin->setLastname('Super');
@@ -31,9 +31,9 @@ class UserFixtures extends Fixture
 
         // Organizers Lyon
         $orgData = [
-            ['organizer@lyon.fr', 'orga123', 'Dupont', 'Marie', '-35 years'],
-            ['eventpro@events.fr', 'event123', 'Martin', 'Pierre', '-40 years'],
-            ['tech@conf.fr', 'tech123', 'Bernard', 'Sophie', '-28 years'],
+            ['organizer@lyon.SHOULDNOTEXIST.fr', 'orga123', 'Dupont', 'Marie', '-35 years'],
+            ['eventpro@events.SHOULDNOTEXIST.fr', 'event123', 'Martin', 'Pierre', '-40 years'],
+            ['tech@conf.SHOULDNOTEXIST.fr', 'tech123', 'Bernard', 'Sophie', '-28 years'],
         ];
 
         foreach ($orgData as $data) {
@@ -50,7 +50,7 @@ class UserFixtures extends Fixture
         // 20 users random
         for ($i = 0; $i < 20; $i++) {
             $user = new User();
-            $user->setEmail('user' . $i . '@test.fr');
+            $user->setEmail('user' . $i . '@test.SHOULDNOTEXIST.fr');
             $user->setPassword($this->hasher->hashPassword($user, 'user123'));
             $user->setRoles(['ROLE_USER']);
             $user->setLastname($faker->lastName);
