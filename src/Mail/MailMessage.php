@@ -3,17 +3,7 @@
 namespace App\Mail;
 
 use App\Entity\User;
-use App\Entity\Event;
 use App\Entity\Reservation;
-use App\Mail\ContextInterface;
-use App\Mail\ReservationCreationContext;
-use App\Mail\ReservationModificationContext;
-use App\Mail\ReservationCancellationContext;
-use App\Mail\ReservationReminderContext;
-use App\Mail\AccountDeletionContext;
-use App\Mail\AdminReservationCreationContext;
-use App\Mail\AdminReservationCancellationContext;
-use App\Mail\AdminIncidentContext;
 
 
 final class MailMessage {
@@ -23,7 +13,7 @@ final class MailMessage {
         public readonly string $template,
         public readonly ContextInterface $context,
     ) {}
-    
+
     // FOR ANY NEW BUILDER ALWAYS HAVE THE DESTINATION USER BE THE FIRST ARGUMENT.
     public static function reservationCreation(User $user, Reservation $reservation): self {
         return new self(
@@ -73,12 +63,12 @@ final class MailMessage {
             context: ContextFactory::adminReservationCreation($user, $reservation)
         );
     }
-    public static function adminReservationCancellation(User $user, Reservation $reservation): self {
+    public static function adminReservationCancellation(User $admin, Reservation $reservation): self {
         return new self(
-            to: $user->getEmail(),
+            to: $admin->getEmail(),
             subject: "A User has Cancelled their Reservation",
             template: "emails/admin/reservation_cancellation.html.twig",
-            context: ContextFactory::adminReservationCancellation($user, $reservation)
+            context: ContextFactory::adminReservationCancellation($admin, $reservation)
         );
     }
     public static function adminIncident(
@@ -135,7 +125,8 @@ final class ContextFactory {
     public static function adminReservationCreation(User $user, Reservation $reservation): ContextInterface {
         return new AdminReservationCreationContext($user, $reservation);
     }
-    public static function adminReservationCancellation(User $user, Reservation $reservation): ContextInterface {
+
+    public static function adminReservationCancellation( User $user, Reservation $reservation): ContextInterface {
         return new AdminReservationCancellationContext($user, $reservation);
     }
     public static function adminIncident(

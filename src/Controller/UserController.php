@@ -9,12 +9,13 @@ use App\Form\UserAccountType;
 use App\Mail\MailMessage;
 use App\Mail\MailService;
 use App\Repository\ReservationRepository;
+use App\Security\SupabaseUser;
+use App\Security\UserResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Nzo\UrlEncryptorBundle\Annotations\ParamDecryptor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -26,9 +27,17 @@ class UserController extends AbstractController
     {
     }
     #[Route('/', name: 'app_user_index')]
-    public function index(ReservationRepository $reservationRepository): Response
+    public function index(
+        ReservationRepository $reservationRepository,
+        UserResolver $userResolver
+    ): Response
     {
-        $user = $this->getUser();
+        $securityUser = $this->getUser();
+
+        if (!$securityUser instanceof SupabaseUser) {
+            throw $this->createAccessDeniedException();
+        }
+        $user = $userResolver->resolve($securityUser);
 
         $stats = $reservationRepository->getAccountStat($user);
 
@@ -36,16 +45,28 @@ class UserController extends AbstractController
 
 
         return $this->render('pages/user/index.html.twig', [
+            'user' => $user,
             'stats' => $stats,
             'upcomingReservations' => $upcomingReservations
         ]);
     }
 
     #[Route('/profil', name: 'app_user_profile')]
-    public function profile(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function profile(
+        Request $request,
+        UserResolver $userResolver,
+        EntityManagerInterface $entityManager,
+    ): Response
     {
-        // user profil
-        $user = $this->getUser();
+        $securityUser = $this->getUser();
+
+        if (!$securityUser instanceof SupabaseUser) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $user = $userResolver->resolve($securityUser);
+
+        // Formulaire profil
         $form = $this->createForm(UserAccountType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -55,40 +76,76 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_user_profile');
         }
 
-
-        // password
+        // Formulaire mot de passe
         $changePassword = new ChangePassword();
         $passwordForm = $this->createForm(ChangePasswordType::class, $changePassword);
         $passwordForm->handleRequest($request);
         if ($passwordForm->isSubmitted() && $passwordForm->isValid()) {
-            $user->setPassword($passwordHasher->hashPassword($user, $changePassword->getNewPassword()));
-            $entityManager->persist($user);
-            $entityManager->flush();
-            $this->addFlash('success', 'Mot de passe modifié avec succès.');
+            $newPassword = $changePassword->getNewPassword();
+            $supabaseId = $securityUser->getId();
+
+            $client = new \GuzzleHttp\Client([
+                'base_uri' => rtrim($_ENV['SUPABASE_URL'], '/') . '/',
+                'headers' => [
+                    'apikey' => $_ENV['SUPABASE_SERVICE_KEY'], // clé admin
+                    'Authorization' => 'Bearer ' . $_ENV['SUPABASE_SERVICE_KEY'],
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
+
+            try {
+                $response = $client->put('auth/v1/admin/users/' . $supabaseId, [
+                    'json' => [
+                        'password' => $newPassword,
+                    ],
+                ]);
+
+                if ($response->getStatusCode() === 200) {
+                    $this->addFlash('success', 'Mot de passe mis à jour avec succès.');
+                } else {
+                    $this->addFlash('error', 'Impossible de mettre à jour le mot de passe.');
+                }
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Erreur lors de la mise à jour du mot de passe : ' . $e->getMessage());
+            }
+
             return $this->redirectToRoute('app_user_profile');
         }
 
-
         return $this->render('pages/user/profile.html.twig', [
-            'form' => $form->createView(),
-            'passwordForm' => $passwordForm->createView()
+            'user' => $user,
+            'form' => $form,
+            'passwordForm' => $passwordForm,
         ]);
     }
 
+
     #[Route('/reservations', name: 'app_user_reservations')]
-    public function reservations(ReservationRepository $reservationRepository, Request $request): Response
+    public function reservations(
+        ReservationRepository $reservationRepository,
+        Request $request,
+        UserResolver $userResolver): Response
     {
 
         $filter = $request->query->get('filter', 'all');
         $page = $request->query->getInt('page', 1);
 
+        $securityUser = $this->getUser();
+
+        if (!$securityUser instanceof SupabaseUser) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $user = $userResolver->resolve($securityUser);
+
         $result = $reservationRepository->findByUserWithFilters(
-            $this->getUser(),
+            $user,
             $filter,
             $page
         );
 
         return $this->render('pages/user/reservations.html.twig', [
+            'user' => $user,
             'reservations' => $result['items'],
             'pagination' => $result['pagination'],
             'filter' => $filter,
@@ -96,9 +153,19 @@ class UserController extends AbstractController
     }
 
     #[Route('/preferences', name: 'app_user_preferences')]
-    public function preferences(): Response
+    public function preferences(UserResolver $userResolver): Response
     {
-        return $this->render('pages/user/preferences.html.twig');
+        $securityUser = $this->getUser();
+
+        if (!$securityUser instanceof SupabaseUser) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $user = $userResolver->resolve($securityUser);
+
+        return $this->render('pages/user/preferences.html.twig', [
+            'user' => $user,
+        ]);
     }
 
     #[Route('/delete/{id}', name: 'app_user_delete')]

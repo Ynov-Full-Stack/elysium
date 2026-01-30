@@ -38,11 +38,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      */
     public function findAdmins(): array
     {
-        return $this->createQueryBuilder('u')
-            ->where('JSON_CONTAINS(u.roles, :role) = 1')
-            ->setParameter('role', json_encode('ROLE_ADMIN'))
-            ->getQuery()
-            ->getResult();
+        return array_filter(
+            $this->findAll(),
+            fn (User $user) => in_array('ROLE_ADMIN', $user->getRoles(), true)
+        );
     }
 
     //    /**
