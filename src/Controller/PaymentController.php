@@ -10,6 +10,7 @@ use App\Mail\MailService;
 use App\Repository\UserRepository;
 use App\Security\UserResolver;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,7 +22,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[Route('/payment')]
 class PaymentController extends AbstractController
 {
-    public function __construct(private readonly MailService $mailService, private readonly UserRepository $userRepository) {}
+    public function __construct(
+        private readonly MailService $mailService,
+        private readonly UserRepository $userRepository,
+        private readonly LoggerInterface $logger
+
+    ) {}
 
     #[Route('/checkout/{id}', name: 'stripe_checkout', methods: ['POST'])]
     public function checkout(Event $event, Request $request, UrlGeneratorInterface $urlGenerator, UserResolver $userResolver): Response
@@ -77,6 +83,8 @@ class PaymentController extends AbstractController
     public function success(
         Request $request,
         EntityManagerInterface $entityManager,
+        LoggerInterface $logger
+
     ): Response
     {
         $sessionId = $request->query->get('session_id');
@@ -115,11 +123,11 @@ class PaymentController extends AbstractController
                 $reservation->setStatus('en cours');
                 $reservation->setStripeSessionId($session->id);
 
-                $this->mailService->send(MailMessage::reservationCreation($user, $reservation));
+                $this->mailService->send(MailMessage::reservationCreation($user, $reservation, $logger));
                 $this->mailService->buildAndSendMessages(
                     users: $this->userRepository->findAdmins(),
                     factory: [MailMessage::class, 'adminReservationCreation'],
-                    args: [$reservation]
+                    args: [$reservation, $this->logger]
                 );
 
                 $entityManager->persist($reservation);

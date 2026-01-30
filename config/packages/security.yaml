@@ -1,4 +1,6 @@
 security:
+    password_hashers:
+        App\Security\SupabaseUser: 'plaintext'
     providers:
         supabase_provider:
             id: App\Security\SupabaseProvider

@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 final class UserResolver
 {
     public function __construct(
-        private UserRepository         $userRepository,
+        private UserRepository $userRepository,
         private EntityManagerInterface $em
     )
     {
@@ -23,17 +23,23 @@ final class UserResolver
         ]);
 
         if (!$user) {
-            $user = new User();
-            $user->setEmail($securityUser->getUserIdentifier());
-            $user->setSupabaseId($securityUser->getId());
+            $user = $this->userRepository->findOneBy([
+                'email' => $securityUser->getUserIdentifier(),
+            ]);
 
-            $displayName = $securityUser->getDisplayName()
-                ?? explode('@', $securityUser->getUserIdentifier())[0];
+            if ($user) {
+                $user->setSupabaseId($securityUser->getId());
+            } else {
+                $user = new User();
+                $user->setEmail($securityUser->getUserIdentifier());
+                $user->setSupabaseId($securityUser->getId());
+                $displayName = $securityUser->getDisplayName()
+                    ?? explode('@', $securityUser->getUserIdentifier())[0];
+                $user->setDisplayName($displayName);
+                $user->setRoles(['ROLE_USER']);
+                $this->em->persist($user);
+            }
 
-            $user->setDisplayName($displayName);
-            $user->setRoles(['ROLE_USER']);
-
-            $this->em->persist($user);
             $this->em->flush();
         }
 

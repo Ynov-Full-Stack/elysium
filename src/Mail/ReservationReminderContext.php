@@ -4,7 +4,6 @@ namespace App\Mail;
 
 use App\Entity\Reservation;
 use App\Entity\User;
-use App\Mail\ContextInterface;
 
 final class ReservationReminderContext implements ContextInterface{
     public function __construct(
