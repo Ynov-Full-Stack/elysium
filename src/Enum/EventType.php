@@ -5,7 +5,7 @@ namespace App\Enum;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-enum EventType: int implements TranslatableInterface
+enum EventType: int
 {
     case CONCERT = 0;
     case SPECTACLE = 1;
@@ -20,9 +20,22 @@ enum EventType: int implements TranslatableInterface
     case GALA = 10;
     case OTHER = 11;
 
-    public function trans(TranslatorInterface $translator, ?string $locale = null): string
+    public function label(): string
     {
-        return $translator->trans('event_type.' . strtolower($this->name), locale: $locale);
+        return match ($this) {
+            self::CONCERT => 'Concert',
+            self::SPECTACLE => 'Spectacle',
+            self::CONFERENCE => 'Conférence',
+            self::WORKSHOP => 'Workshop',
+            self::FESTIVAL => 'Festival',
+            self::THEATER => 'Théâtre',
+            self::SPORT => 'Sport',
+            self::EXHIBITION => 'Exposition',
+            self::PARTY => 'Soirée',
+            self::TRAINING => 'Formation',
+            self::GALA => 'Gala',
+            self::OTHER => 'Autre',
+        };
     }
 
 }

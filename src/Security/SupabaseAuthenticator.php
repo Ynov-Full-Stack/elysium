@@ -41,6 +41,7 @@ class SupabaseAuthenticator extends AbstractAuthenticator
     public function authenticate(Request $request): Passport
     {
         $email = $request->request->get('email', '');
+        $role = $request->request->get('role', 'ROLE_USER');
         $password = $request->request->get('password', '');
 
         $userData = $this->fetchSupabaseUser($email, $password);
@@ -52,6 +53,7 @@ class SupabaseAuthenticator extends AbstractAuthenticator
             new UserBadge($email, fn() => new SupabaseUser([
                 'id' => $userData['id'],
                 'email' => $userData['email'],
+                'roles' => $userData['user_metadata']['role'] ?? 'ROLE_USER',
                 'user_metadata' => $userData['user_metadata'] ?? [],
                 'access_token' => $userData['access_token'],
             ])),
@@ -96,6 +98,8 @@ class SupabaseAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): RedirectResponse
     {
+        $request->getSession()->getFlashBag()->add('success', 'Connexion réussie !');
+
         // Redirection après login
         $request->getSession()->set(
             'supabase_access_token',
