@@ -13,4 +13,29 @@ final class HomeController extends AbstractController
     {
         return $this->render('pages/home/index.html.twig');
     }
+
+    #[Route('/legal_notices', name: 'app_legal_notices')]
+    public function legal_notices(): Response
+    {
+        return $this->render('components/legal_notices.html.twig');
+    }
+
+    #[Route('/about', name: 'app_about')]
+    public function about(): Response
+    {
+        return $this->render('components/about.html.twig');
+    }
+
+    #[Route('/cgu', name: 'app_cgu')]
+    public function cgu(): Response
+    {
+        return $this->render('components/CGU.html.twig');
+    }
+    #[Route('/cgv', name: 'app_cgv')]
+    public function cgv(): Response
+    {
+        return $this->render('components/CGV.html.twig');
+    }
+
+
 }
