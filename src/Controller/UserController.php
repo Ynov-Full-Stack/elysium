@@ -16,7 +16,6 @@ use Nzo\UrlEncryptorBundle\Annotations\ParamDecryptor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -67,6 +66,13 @@ class UserController extends AbstractController
 
         $user = $userResolver->resolve($securityUser);
 
+        $form = $this->createForm(UserAccountType::class, $user);
+        $form->handleRequest($request);
+
+        $changePassword = new ChangePassword();
+        $passwordForm = $this->createForm(ChangePasswordType::class, $changePassword);
+        $passwordForm->handleRequest($request);
+
 //        $form = $this->createForm(UserAccountType::class, $user);
 //        $form->handleRequest($request);
 //        if ($form->isSubmitted() && $form->isValid()) {
@@ -92,18 +98,31 @@ class UserController extends AbstractController
 
         return $this->render('pages/user/profile.html.twig', [
             'user' => $user,
+            'form' => $form,
+            'passwordForm' => $passwordForm,
         ]);
     }
 
     #[Route('/reservations', name: 'app_user_reservations')]
-    public function reservations(ReservationRepository $reservationRepository, Request $request): Response
+    public function reservations(
+        ReservationRepository $reservationRepository,
+        Request $request,
+        UserResolver $userResolver): Response
     {
 
         $filter = $request->query->get('filter', 'all');
         $page = $request->query->getInt('page', 1);
 
+        $securityUser = $this->getUser();
+
+        if (!$securityUser instanceof SupabaseUser) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $user = $userResolver->resolve($securityUser);
+
         $result = $reservationRepository->findByUserWithFilters(
-            $this->getUser(),
+            $user,
             $filter,
             $page
         );

@@ -43,7 +43,6 @@ class SupabaseAuthenticator extends AbstractAuthenticator
         $email = $request->request->get('email', '');
         $password = $request->request->get('password', '');
 
-        // 🔥 Appel Supabase avant de créer le UserBadge
         $userData = $this->fetchSupabaseUser($email, $password);
         if (!$userData) {
             throw new AuthenticationException('Identifiants invalides');
@@ -53,10 +52,11 @@ class SupabaseAuthenticator extends AbstractAuthenticator
             new UserBadge($email, fn() => new SupabaseUser([
                 'id' => $userData['id'],
                 'email' => $userData['email'],
+                'user_metadata' => $userData['user_metadata'] ?? [],
                 'access_token' => $userData['access_token'],
             ])),
             new CustomCredentials(
-                fn($credentials, UserInterface $user) => true, // déjà vérifié par fetchSupabaseUser
+                fn($credentials, UserInterface $user) => true,
                 ['password' => $password]
             )
         );
@@ -97,6 +97,10 @@ class SupabaseAuthenticator extends AbstractAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): RedirectResponse
     {
         // Redirection après login
+        $request->getSession()->set(
+            'supabase_access_token',
+            $token->getUser()->getSupabaseData()['access_token']
+        );
         $targetPath = $this->getTargetPath($request->getSession(), $firewallName);
         return new RedirectResponse($targetPath ?: '/');
     }

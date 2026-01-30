@@ -30,7 +30,6 @@ final class AuthController extends AbstractController
     #[Route('/login', name: 'app_login_supabase', methods: ['GET', 'POST'])]
     public function login(Request $request): Response
     {
-        // Symfony Security gère tout !
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
         }
@@ -53,10 +52,11 @@ final class AuthController extends AbstractController
 
         if ($request->isMethod('POST')) {
             $email = $request->request->get('email');
+            $displayName = $request->request->get('display_name');
             $password = $request->request->get('password');
 
-            if (!$email || !$password) {
-                $this->addFlash('error', 'Please provide both email and password.');
+            if (!$email || !$password || !$displayName) {
+                $this->addFlash('error', 'Veuillez remplir tous les champs.');
             } else {
                 try {
                     $response = $this->client->post('/auth/v1/signup', [
@@ -67,6 +67,9 @@ final class AuthController extends AbstractController
                         ],
                         'json' => [
                             'email' => $email,
+                            'data' => [
+                                'display_name' => $displayName,
+                            ],
                             'password' => $password,
                         ],
                     ]);
@@ -74,7 +77,6 @@ final class AuthController extends AbstractController
                     $body = json_decode($response->getBody(), true);
                     $accessToken = $body['access_token'] ?? null;
                     $user = $body['user'] ?? null;
-
                     // If auto-confirm is on, we might get a token right away
                     if ($accessToken) {
                         $session->set('access_token', $accessToken);
@@ -86,8 +88,6 @@ final class AuthController extends AbstractController
                     return $this->redirectToRoute('app_login_supabase');
                 } catch (RequestException $e) {
                     $errorBody = $e->hasResponse() ? (string)$e->getResponse()->getBody() : $e->getMessage();
-                    dump($errorBody); // <-- ça te permettra de voir exactement ce que Supabase renvoie
-
                     $decodedError = json_decode($errorBody, true);
                     $this->addFlash('error', 'Inscription a échoué');
                 }
@@ -113,7 +113,6 @@ final class AuthController extends AbstractController
                     ]
                 ]);
             } catch (\Exception $e) {
-                // Ignore logout errors from supabase, proceed to clear local session
             }
         }
 

@@ -34,6 +34,7 @@
             {# Formulaire d'inscription #}
             <form method="post" action="{{ path('app_register_supabase') }}" id="register-form" class="space-y-4">
                 <div>
+                    <label for="email" class="block text-sm font-medium mb-1">Email</label>
                     <input type="email"
                            class="w-full rounded-lg bg-white border px-4 py-2.5 text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#C59A3A] focus:border-transparent transition"
                            id="email"
@@ -43,7 +44,17 @@
 
                            required>
                 </div>
-
+                <div>
+                    <label for="display_name" class="block text-sm font-medium mb-1">Nom complet</label>
+                    <input
+                        type="text"
+                        name="display_name"
+                        id="display_name"
+                        placeholder="Nom complet"
+                        required
+                        class="w-full rounded-lg bg-white border px-4 py-2.5 text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#C59A3A] focus:border-transparent transition"
+                    >
+                </div>
                 <div>
                     <label for="password" class="block text-sm font-medium mb-1">Password</label>
                     <input
@@ -69,7 +80,7 @@
 
             {# Footer / lien login #}
             <div class="mt-8 text-center text-xs text-[#9CA3AF]">
-                Already have an account? <a href="{{ path('app_login_supabase') }}" class="text-[#C59A3A] hover:underline">Sign in here</a>
+                Vous avez déjà un compte ? <a href="{{ path('app_login_supabase') }}" class="text-[#C59A3A] hover:underline">Cliquez ici !</a>
             </div>
         </div>
     </div>
