@@ -26,4 +26,16 @@ final class HomeController extends AbstractController
         return $this->render('components/about.html.twig');
     }
 
+    #[Route('/cgu', name: 'app_cgu')]
+    public function cgu(): Response
+    {
+        return $this->render('components/CGU.html.twig');
+    }
+    #[Route('/cgv', name: 'app_cgv')]
+    public function cgv(): Response
+    {
+        return $this->render('components/CGV.html.twig');
+    }
+
+
 }
