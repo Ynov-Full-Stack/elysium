@@ -50,8 +50,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
 
         for ($i = 0; $i < 20; $i++) {
             $eventDate = $faker->dateTimeBetween('2026-04-01', '2026-12-31');
-            $regStart = clone $eventDate;
-            $regStart->modify('-45 days');
+            $regStart = $faker->dateTimeBetween('2026-01-01', '2026-01-31');
             $regEnd = clone $eventDate;
             $regEnd->modify('-3 days');
 
