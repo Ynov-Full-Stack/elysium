@@ -6,31 +6,20 @@
     <div class="min-h-screen flex items-center justify-center background-cream px-4">
         <div class="w-full max-w-md bg-white/90 backdrop-blur rounded-2xl shadow-2xl p-8 border border-[#E0D4BF]">
 
-            {# Messages flash success / error #}
             {% for label, messages in app.flashes %}
                 {% for message in messages %}
-                    {% if label == 'success' %}
-                        <div class="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-lg text-sm">
-                            {{ message }}
-                        </div>
-                    {% elseif label == 'error' %}
-                        <div class="mb-6 bg-[#FDF2F2] border border-[#FCA5A5] text-[#B91C1C] px-4 py-3 rounded-lg text-sm">
-                            {{ message }}
-                        </div>
-                    {% else %}
-                        <div class="mb-6 bg-gray-50 border border-gray-200 text-gray-800 px-4 py-3 rounded-lg text-sm">
-                            {{ message }}
-                        </div>
-                    {% endif %}
+                    <div class="mb-6 px-4 py-3 rounded-lg text-sm
+                    {% if label == 'success' %}bg-emerald-50 border border-emerald-200 text-emerald-800{% elseif label == 'error' %}bg-[#FDF2F2] border border-[#FCA5A5] text-[#B91C1C]{% else %}bg-gray-50 border border-gray-200 text-gray-800{% endif %}">
+                        {{ message }}
+                    </div>
                 {% endfor %}
             {% endfor %}
-            {# Titre #}
+
             <div class="text-center mb-8">
                 <h1 class="text-3xl font-semibold tracking-wide text-[#0C325C]">Welcome Back</h1>
-                <p class="text-sm text-[#7A6B56] mt-2">Sign in to access your dashboard</p>
+                <p class="text-sm text-[#7A6B56] mt-2">Sign in using a magic link</p>
             </div>
 
-            {# Formulaire de login #}
             <form method="post" action="{{ path('app_login_supabase') }}" id="login-form" class="space-y-4" data-turbo="false">
                 <div>
                     <input type="email"
@@ -43,30 +32,16 @@
                     >
                 </div>
 
-                <div>
-                    <label for="password" class="block text-sm font-medium mb-1">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="••••••••"
-                        required
-                        class="w-full rounded-lg bg-white border px-4 py-2.5 text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#C59A3A] focus:border-transparent transition"
-                    >
-                </div>
-
                 <button
                     type="submit"
                     id="login-submit"
-                    class="w-full rounded-lg bg-[#0C325C] hover:bg-[#134072] text-white font-medium py-3 transition shadow-lg shadow-[#0C325C]/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-                    disabled
+                    class="w-full rounded-lg bg-[#0C325C] hover:bg-[#134072] text-white font-medium py-3 transition shadow-lg shadow-[#0C325C]/30 flex items-center justify-center"
                 >
-                    <span class="login-submit-text">Sign in</span>
+                    <span class="login-submit-text">Send Magic Link</span>
                     <span class="login-spinner hidden ml-2 inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                 </button>
             </form>
 
-            {# Footer / lien register #}
             <div class="mt-8 text-center text-xs text-[#9CA3AF]">
                 Don't have an account? <a href="{{ path('app_register_supabase') }}" class="text-[#C59A3A] hover:underline">Create an account</a>
             </div>
@@ -76,24 +51,20 @@
     <script>
         (function () {
             const emailInput   = document.getElementById('email');
-            const passInput    = document.getElementById('password');
             const submitButton = document.getElementById('login-submit');
             const form         = document.getElementById('login-form');
             const textSpan     = submitButton.querySelector('.login-submit-text');
             const spinnerSpan  = submitButton.querySelector('.login-spinner');
 
             function toggleButton() {
-                const hasEmail = emailInput.value.trim().length > 0;
-                const hasPass  = passInput.value.trim().length > 0;
-                submitButton.disabled = !(hasEmail && hasPass);
+                submitButton.disabled = emailInput.value.trim().length === 0;
             }
 
             emailInput.addEventListener('input', toggleButton);
-            passInput.addEventListener('input', toggleButton);
 
             form.addEventListener('submit', function () {
                 submitButton.disabled = true;
-                textSpan.textContent = 'Signing in...';
+                textSpan.textContent = 'Sending...';
                 if (spinnerSpan) spinnerSpan.style.display = 'inline-block';
             });
 
