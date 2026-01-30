@@ -25,7 +25,13 @@ class UserCrudController extends AbstractCrudController
             TextField::new('lastname', 'Nom'),
             TextField::new('firstname', 'Prénom'),
             DateField::new('birthdate', 'Date de naissance'),
-            ChoiceField::new('roles', 'Rôles') ->setChoices([ 'Utilisateur' => 'ROLE_USER', 'Administrateur' => 'ROLE_ADMIN', ]) ->allowMultipleChoices()
+            ChoiceField::new('roles', 'Rôles')
+                ->setChoices([
+                    'Utilisateur' => 'ROLE_USER',
+                    'Administrateur' => 'ROLE_ADMIN',
+                ])
+                ->allowMultipleChoices()
+                ->renderExpanded(),
         ];
     }
 

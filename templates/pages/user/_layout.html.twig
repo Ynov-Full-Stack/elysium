@@ -8,11 +8,13 @@
                 <aside class="lg:col-span-4 xl:col-span-3 bg-white/80 backdrop-blur-sm shadow-2xl rounded-3xl p-8 border border-[#C29757]/20 sticky top-30 h-fit">
                     <div class="flex items-center gap-4 mb-10 pb-8 border-b border-[#C29757]/20">
                         <div class="w-16 h-16 bg-gradient-to-br from-[#163260] to-[#1e4178] rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                            {{ app.user.firstname|first|upper }}{{ app.user.lastname|first|upper }}
+                            {% set parts = user.displayName|split(' ') %}
+                            {{ parts|map(p => p|first|upper)|join('') }}
+
                         </div>
                         <div>
-                            <h3 class="text-2xl font-black text-[#163260] leading-tight">{{ app.user.firstname }} {{ app.user.lastname }}</h3>
-                            <p class="text-[#163260]/60 font-medium text-sm">{{ app.user.email }}</p>
+                            <h3 class="text-2xl font-black text-[#163260] leading-tight">{{ user.displayName }}</h3>
+                            <p class="text-[#163260]/60 font-medium text-sm">{{ user.email }}</p>
                         </div>
                     </div>
 
@@ -69,11 +71,11 @@
                             Préférences
                         </a>
 
-                        <a href="{{ path('app_logout') }}"
-                           class="flex items-center gap-4 p-4 rounded-2xl text-red-600 font-semibold hover:bg-red-50 border border-red-200/50 hover:shadow-md transition-all duration-300 justify-center">
-                            {% include'icons/box-arrow-right.svg' %}
-                            Déconnexion
-                        </a>
+{#                        <a href="{{ path('app_logout') }}"#}
+{#                           class="flex items-center gap-4 p-4 rounded-2xl text-red-600 font-semibold hover:bg-red-50 border border-red-200/50 hover:shadow-md transition-all duration-300 justify-center">#}
+{#                            {% include'icons/box-arrow-right.svg' %}#}
+{#                            Déconnexion#}
+{#                        </a>#}
                     </nav>
                 </aside>
 

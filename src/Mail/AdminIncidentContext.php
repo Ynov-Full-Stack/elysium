@@ -2,8 +2,6 @@
 
 namespace App\Mail;
 
-use App\Mail\ContextInterface;
-
 final class AdminIncidentContext implements ContextInterface{
     public function __construct(
         public readonly string $errorType,

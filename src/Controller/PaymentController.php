@@ -8,7 +8,9 @@ use App\Entity\User;
 use App\Mail\MailMessage;
 use App\Mail\MailService;
 use App\Repository\UserRepository;
+use App\Security\UserResolver;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,10 +22,14 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[Route('/payment')]
 class PaymentController extends AbstractController
 {
-    public function __construct(private readonly MailService $mailService, private readonly UserRepository $userRepository) {}
+    public function __construct(
+        private readonly MailService $mailService,
+        private readonly UserRepository $userRepository,
+
+    ) {}
 
     #[Route('/checkout/{id}', name: 'stripe_checkout', methods: ['POST'])]
-    public function checkout(Event $event, Request $request, UrlGeneratorInterface $urlGenerator): Response
+    public function checkout(Event $event, Request $request, UrlGeneratorInterface $urlGenerator, UserResolver $userResolver): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $quantity = max(1, (int) $request->request->get('quantity', 1));
@@ -44,6 +50,7 @@ class PaymentController extends AbstractController
         $cancelUrl = $urlGenerator->generate('stripe_cancel', [],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
+        $user = $userResolver->resolve($this->getUser());
 
         /** @var Création de la session avec les références des produits $session */
         $session = Session::create([
@@ -63,7 +70,7 @@ class PaymentController extends AbstractController
             'cancel_url' => $cancelUrl,
             'metadata' => [
                 'event_id' => $event->getId(),
-                'user_id' => $this->getUser()->getId(),
+                'user_id' => $user->getId(),
                 'quantity' => $quantity,
             ],
         ]);
@@ -72,7 +79,11 @@ class PaymentController extends AbstractController
     }
 
     #[Route('/success', name: 'stripe_success')]
-    public function success(Request $request, EntityManagerInterface $entityManager): Response
+    public function success(
+        Request $request,
+        EntityManagerInterface $entityManager,
+
+    ): Response
     {
         $sessionId = $request->query->get('session_id');
 
@@ -110,7 +121,7 @@ class PaymentController extends AbstractController
                 $reservation->setStatus('en cours');
                 $reservation->setStripeSessionId($session->id);
 
-                $this->mailService->send(MailMessage::reservationCreation($this->getUser(), $reservation));
+                $this->mailService->send(MailMessage::reservationCreation($user, $reservation));
                 $this->mailService->buildAndSendMessages(
                     users: $this->userRepository->findAdmins(),
                     factory: [MailMessage::class, 'adminReservationCreation'],
