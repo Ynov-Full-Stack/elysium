@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="min-h-screen bg-[#F5F1E8] flex flex-col">
+        <section class="flex flex-col items-center justify-center text-center flex-grow px-6 py-24 bg-gradient-to-b from-[#0C325C]/95 to-[#0C325C]/50 text-white relative overflow-hidden">
+            <!-- Image centrée parfaitement -->
+            <img src="{{ asset('img/concert-bg.png') }}"
+                 class="absolute inset-0 w-full h-full object-cover object-center opacity-15"
+                 alt="Concert">
+
+            <div class="relative z-10 max-w-2xl">
+                <h1 class="text-5xl md:text-6xl font-serif tracking-tight mb-6">
+                    À propos d'Elysium
+                </h1>
+            </div>
+        </section>
+        <section class="text-[#050308] py-16">
+            <div class="max-w-4xl mx-auto px-6 lg:px-8 space-y-10">
+                <p class="text-lg leading-relaxed">
+                    Elysium est une plateforme de réservation d'événements en ligne qui simplifie
+                    la mise en relation entre organisateurs et participants. En quelques clics,
+                    vous découvrez, réservez et gérez vos billets pour des expériences uniques.
+                </p>
+                <section class="space-y-3">
+                    <h2 class="text-2xl font-semibold">Ce que nous faisons</h2>
+                    <p class="text-lg leading-relaxed">
+                        Notre objectif est de rendre la réservation d'événements simple, claire et sécurisée.
+                        Elysium centralise la billetterie, le paiement et les informations pratiques
+                        pour que chacun gagne du temps : les organisateurs comme les participants.
+                    </p>
+                </section>
+                <section class="grid gap-8 md:grid-cols-2">
+                    <div class="space-y-4">
+                        <h3 class="text-sm font-semibold uppercase tracking-[0.16em] text-[#C29757]">
+                            Pour les participants
+                        </h3>
+                        <ul class="space-y-2 text-sm leading-relaxed">
+                            <li>• Découvrir des événements près de chez soi</li>
+                            <li>• Réserver ses billets en quelques secondes</li>
+                            <li>• Recevoir immédiatement ses billets par email</li>
+                        </ul>
+                    </div>
+                    <div class="space-y-4">
+                        <h3 class="text-sm font-semibold uppercase tracking-[0.16em] text-[#C29757]">
+                            Pour les organisateurs
+                        </h3>
+                        <ul class="space-y-2 text-sm leading-relaxed">
+                            <li>• Créer une billetterie en ligne simplement</li>
+                            <li>• Suivre les ventes en temps réel</li>
+                            <li>• Gérer les listes de participants le jour J</li>
+                        </ul>
+                    </div>
+                </section>
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-semibold">Nos engagements</h2>
+                    <ul class="space-y-2 text-sm leading-relaxed">
+                        <li>• Paiements sécurisés et données protégées</li>
+                        <li>• Informations claires sur les tarifs et conditions</li>
+                        <li>• Support disponible en cas de question sur vos réservations</li>
+                    </ul>
+                </section>
+                <section class="pt-10 border-t border-[#050308]/10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <p class="text-sm text-[#050308]/75">
+                        Envie de tester Elysium ? Découvrez les événements en cours ou créez votre première billetterie.
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="/evenements"
+                           class="bg-[#FDFAF5] text-[#050308] px-8 py-4 text-sm font-bold rounded-xl hover:bg-[#C29757] hover:text-white transition-all duration-300 shadow-lg">
+                            Voir les événements
+                        </a>
+                        <a href="/organisateurs"
+                           class="px-8 py-4 text-sm font-semibold rounded-xl border-2 border-[#050308]/30 text-[#050308] hover:bg-[#050308]/5 hover:border-[#050308]/50 transition-all duration-300">
+                            Créer un événement
+                        </a>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </div>
+{% endblock %}
