@@ -9,6 +9,8 @@ use App\Form\UserAccountType;
 use App\Mail\MailMessage;
 use App\Mail\MailService;
 use App\Repository\ReservationRepository;
+use App\Security\SupabaseUser;
+use App\Security\UserResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Nzo\UrlEncryptorBundle\Annotations\ParamDecryptor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,52 +28,70 @@ class UserController extends AbstractController
     {
     }
     #[Route('/', name: 'app_user_index')]
-    public function index(ReservationRepository $reservationRepository): Response
+    public function index(
+        ReservationRepository $reservationRepository,
+        UserResolver $userResolver
+    ): Response
     {
-        $user = $this->getUser();
+        $securityUser = $this->getUser();
+
+        if (!$securityUser instanceof SupabaseUser) {
+            throw $this->createAccessDeniedException();
+        }
+        $user = $userResolver->resolve($securityUser);
 
         $stats = $reservationRepository->getAccountStat($user);
 
         $upcomingReservations = $reservationRepository->getUpcomingReservations($user);
+//        dd($user);
 
 
         return $this->render('pages/user/index.html.twig', [
+            'user' => $user,
             'stats' => $stats,
             'upcomingReservations' => $upcomingReservations
         ]);
     }
 
     #[Route('/profil', name: 'app_user_profile')]
-    public function profile(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function profile(
+        Request $request,
+        UserResolver $userResolver
+    ): Response
     {
-        // user profil
-        $user = $this->getUser();
-        $form = $this->createForm(UserAccountType::class, $user);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($user);
-            $entityManager->flush();
-            $this->addFlash('success', 'Profile modifié avec succès.');
-            return $this->redirectToRoute('app_user_profile');
+        $securityUser = $this->getUser();
+
+        if (!$securityUser instanceof SupabaseUser) {
+            throw $this->createAccessDeniedException();
         }
 
+        $user = $userResolver->resolve($securityUser);
 
-        // password
-        $changePassword = new ChangePassword();
-        $passwordForm = $this->createForm(ChangePasswordType::class, $changePassword);
-        $passwordForm->handleRequest($request);
-        if ($passwordForm->isSubmitted() && $passwordForm->isValid()) {
-            $user->setPassword($passwordHasher->hashPassword($user, $changePassword->getNewPassword()));
-            $entityManager->persist($user);
-            $entityManager->flush();
-            $this->addFlash('success', 'Mot de passe modifié avec succès.');
-            return $this->redirectToRoute('app_user_profile');
-        }
+//        $form = $this->createForm(UserAccountType::class, $user);
+//        $form->handleRequest($request);
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $entityManager->persist($user);
+//            $entityManager->flush();
+//            $this->addFlash('success', 'Profile modifié avec succès.');
+//            return $this->redirectToRoute('app_user_profile');
+//        }
+//
+//
+//        // password
+//        $changePassword = new ChangePassword();
+//        $passwordForm = $this->createForm(ChangePasswordType::class, $changePassword);
+//        $passwordForm->handleRequest($request);
+//        if ($passwordForm->isSubmitted() && $passwordForm->isValid()) {
+//            $user->setPassword($passwordHasher->hashPassword($user, $changePassword->getNewPassword()));
+//            $entityManager->persist($user);
+//            $entityManager->flush();
+//            $this->addFlash('success', 'Mot de passe modifié avec succès.');
+//            return $this->redirectToRoute('app_user_profile');
+//        }
 
 
         return $this->render('pages/user/profile.html.twig', [
-            'form' => $form->createView(),
-            'passwordForm' => $passwordForm->createView()
+            'user' => $user,
         ]);
     }
 
