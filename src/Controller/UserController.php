@@ -95,12 +95,6 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/preferences', name: 'app_user_preferences')]
-    public function preferences(): Response
-    {
-        return $this->render('pages/user/preferences.html.twig');
-    }
-
     #[Route('/delete/{id}', name: 'app_user_delete')]
     #[ParamDecryptor(['id'])]
     public function delete(Request $request, User $user): Response
