@@ -19,8 +19,8 @@
                     {% include 'icons/user-full.svg' %}
             </a>
         {% else %}
-            <a href="{{ path('app_login') }}" class="text-[#0C325C] hover:underline">Connexion</a>
-            <a href="{{ path('app_register') }}" class="bg-[#0C325C] text-white px-4 py-2 rounded-lg hover:bg-[#134072] transition">Inscription</a>
+            <a href="{{ path('app_login_supabase') }}" class="text-[#0C325C] hover:underline">Connexion</a>
+            <a href="{{ path('app_register_supabase') }}" class="bg-[#0C325C] text-white px-4 py-2 rounded-lg hover:bg-[#134072] transition">Inscription</a>
         {% endif %}
     </nav>
 </header>

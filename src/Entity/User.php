@@ -34,16 +34,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastname = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstname = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $birthdate = null;
 
     /**
@@ -57,6 +57,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $reservations;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $supabaseId = null;
 
     public function __construct()
     {
@@ -249,5 +252,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private function getFullName(): string
     {
         return trim(($this->firstname ?? '') . ' ' . ($this->lastname ?? ''));
+    }
+
+    public function getSupabaseId(): ?string
+    {
+        return $this->supabaseId;
+    }
+
+    public function setSupabaseId(?string $supabaseId): static
+    {
+        $this->supabaseId = $supabaseId;
+
+        return $this;
     }
 }

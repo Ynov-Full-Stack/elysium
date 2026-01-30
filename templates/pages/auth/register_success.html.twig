@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registration Successful{% endblock %}
+
+{% block body %}
+    <div class="auth-container text-center">
+        <h1 class="text-success mb-4">Success!</h1>
+        <p>Your account has been created.</p>
+        <p>Please check your email to confirm your account usually, but for now you can try to login.</p>
+        <a href="{{ path('app_login') }}" class="btn btn-primary">Go to Login</a>
+    </div>
+{% endblock %}
