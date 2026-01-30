@@ -3,8 +3,9 @@
 namespace App\Security;
 
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
-class SupabaseUser implements UserInterface
+class SupabaseUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
     private array $userData;
 
@@ -36,17 +37,20 @@ class SupabaseUser implements UserInterface
     {
         return $this->getUserMetadata()['display_name'] ?? null;
     }
+
     public function getSupabaseData(): array
     {
         return $this->userData;
     }
 
-    public function getAccessToken(): ?string
-    {
-        return $this->userData['access_token'] ?? null;
-    }
     public function getId(): ?string
     {
         return $this->userData['id'] ?? null;
+    }
+
+    // 🔥 IMPLEMENTATION PasswordAuthenticatedUserInterface
+    public function getPassword(): ?string
+    {
+        return null;
     }
 }

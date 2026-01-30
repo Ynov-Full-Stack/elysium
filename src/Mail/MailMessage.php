@@ -3,17 +3,8 @@
 namespace App\Mail;
 
 use App\Entity\User;
-use App\Entity\Event;
 use App\Entity\Reservation;
-use App\Mail\ContextInterface;
-use App\Mail\ReservationCreationContext;
-use App\Mail\ReservationModificationContext;
-use App\Mail\ReservationCancellationContext;
-use App\Mail\ReservationReminderContext;
-use App\Mail\AccountDeletionContext;
-use App\Mail\AdminReservationCreationContext;
-use App\Mail\AdminReservationCancellationContext;
-use App\Mail\AdminIncidentContext;
+use Psr\Log\LoggerInterface;
 
 
 final class MailMessage {
@@ -23,14 +14,14 @@ final class MailMessage {
         public readonly string $template,
         public readonly ContextInterface $context,
     ) {}
-    
+
     // FOR ANY NEW BUILDER ALWAYS HAVE THE DESTINATION USER BE THE FIRST ARGUMENT.
-    public static function reservationCreation(User $user, Reservation $reservation): self {
+    public static function reservationCreation(User $user, Reservation $reservation, LoggerInterface $logger): self {
         return new self(
             to: $user->getEmail(),
             subject: "New Reservation Made",
             template: "emails/reservation_creation.html.twig",
-            context: ContextFactory::reservationCreation($user, $reservation)
+            context: ContextFactory::reservationCreation($user, $reservation, $logger)
         );
     }
     public static function reservationModification(User $user, Reservation $reservation): self {
