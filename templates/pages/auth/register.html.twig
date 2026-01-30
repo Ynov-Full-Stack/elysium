@@ -27,8 +27,8 @@
 
             {# Titre #}
             <div class="text-center mb-8">
-                <h1 class="text-3xl font-semibold tracking-wide text-[#0C325C]">Create Account</h1>
-                <p class="text-sm text-[#7A6B56] mt-2">Join our community today</p>
+                <h1 class="text-3xl font-semibold tracking-wide text-[#0C325C]">Créer un compte</h1>
+                <p class="text-sm text-[#7A6B56] mt-2">Rejoindez la communauté aujourd'hui.</p>
             </div>
 
             {# Formulaire d'inscription #}
@@ -39,7 +39,7 @@
                            class="w-full rounded-lg bg-white border px-4 py-2.5 text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#C59A3A] focus:border-transparent transition"
                            id="email"
                            name="email"
-                           placeholder="you@example.com"
+                           placeholder="email@example.com"
                            value="{{ emailValue|default('') }}"
 
                            required>
@@ -56,7 +56,7 @@
                     >
                 </div>
                 <div>
-                    <label for="password" class="block text-sm font-medium mb-1">Password</label>
+                    <label for="password" class="block text-sm font-medium mb-1">Mot de passe</label>
                     <input
                         type="password"
                         name="password"
@@ -73,7 +73,7 @@
                     class="w-full rounded-lg bg-[#0C325C] hover:bg-[#134072] text-white font-medium py-3 transition shadow-lg shadow-[#0C325C]/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                     disabled
                 >
-                    <span class="register-submit-text">Sign up</span>
+                    <span class="register-submit-text">S'inscrire</span>
                     <span class="register-spinner hidden ml-2 inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                 </button>
             </form>

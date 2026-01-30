@@ -34,12 +34,9 @@ final class AuthController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
+
         return $this->render('pages/auth/login.html.twig');
     }
-
-
-
-
 
     #[Route('/register', name: 'app_register_supabase', methods: ['GET', 'POST'])]
     public function register(Request $request, SessionInterface $session): Response
