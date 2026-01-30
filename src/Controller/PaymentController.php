@@ -25,7 +25,6 @@ class PaymentController extends AbstractController
     public function __construct(
         private readonly MailService $mailService,
         private readonly UserRepository $userRepository,
-        private readonly LoggerInterface $logger
 
     ) {}
 
@@ -83,7 +82,6 @@ class PaymentController extends AbstractController
     public function success(
         Request $request,
         EntityManagerInterface $entityManager,
-        LoggerInterface $logger
 
     ): Response
     {
@@ -123,11 +121,11 @@ class PaymentController extends AbstractController
                 $reservation->setStatus('en cours');
                 $reservation->setStripeSessionId($session->id);
 
-                $this->mailService->send(MailMessage::reservationCreation($user, $reservation, $logger));
+                $this->mailService->send(MailMessage::reservationCreation($user, $reservation));
                 $this->mailService->buildAndSendMessages(
                     users: $this->userRepository->findAdmins(),
                     factory: [MailMessage::class, 'adminReservationCreation'],
-                    args: [$reservation, $this->logger]
+                    args: [$reservation]
                 );
 
                 $entityManager->persist($reservation);
